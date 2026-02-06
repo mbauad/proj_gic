@@ -17,8 +17,8 @@
 
 <body
     class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
-    <aside
-        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-20">
+    <aside id="sidebar"
+        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-40 -translate-x-full md:translate-x-0 transition-transform duration-300 bg-slate-900">
         <div class="flex flex-col p-4">
             <div class="flex items-center justify-center gap-3 mb-8 px-2">
                 <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
@@ -59,13 +59,19 @@
             </nav>
         </div>
     </aside>
-    <main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+    <main class="ml-0 md:ml-64 flex-1 flex flex-col h-screen overflow-hidden transition-all duration-300">
         <header
-            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-8 shrink-0">
-            <h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Gestão de Equipe e Atendentes
-            </h2>
+            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-4 md:px-8 shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleMenu()" class="md:hidden text-slate-400 hover:text-white">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+                <h2 class="text-lg md:text-xl font-bold text-slate-800 dark:text-white tracking-tight truncate">Gestão
+                    de Equipe e Atendentes
+                </h2>
+            </div>
         </header>
-        <div class="flex-1 overflow-y-auto p-8">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-2xl mx-auto flex flex-col gap-6">
 
                 <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 overflow-hidden">
@@ -100,79 +106,89 @@
         </div>
     </main>
 
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/80 z-30 hidden md:hidden transition-opacity duration-300"
+        onclick="toggleMenu()"></div>
+
     <script>
-        const listContainer = document.getElementById('attendants-list-container');
-        const inputName = document.getElementById('new-attendant-name');
-        const btnSave = document.getElementById('btn-save-attendant');
-        const countBadge = document.getElementById('count-badge');
-
-        async function loadAttendants() {
-            const res = await fetch('/api/attendants');
-            const attendants = await res.json();
-
-            renderList(attendants);
+        // Fetch attendants on load
+        async function fetchAttendants() {
+            try {
+                const res = await fetch('/api/attendants');
+                const attendants = await res.json();
+                renderAttendants(attendants);
+            } catch (error) {
+                console.error("Error fetching attendants:", error);
+            }
         }
 
-        function renderList(list) {
-            listContainer.innerHTML = '';
-            countBadge.textContent = list.length;
-
-            if (list.length === 0) {
-                listContainer.innerHTML = `<div class="p-8 text-center text-slate-500">Nenhum atendente cadastrado.</div>`;
-                return;
-            }
+        function renderAttendants(list) {
+            const container = document.getElementById('attendants-list-container');
+            const badge = document.getElementById('count-badge');
+            badge.innerText = list.length;
+            container.innerHTML = '';
 
             list.forEach(name => {
                 const div = document.createElement('div');
-                div.className = 'px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group';
+                div.className = "px-6 py-4 flex justify-between items-center group hover:bg-white/5 transition-colors";
                 div.innerHTML = `
                     <div class="flex items-center gap-3">
-                         <div class="size-8 rounded-full bg-white/5 text-white flex items-center justify-center text-slate-500 font-bold text-xs">
-                            ${getInitials(name)}
-                         </div>
-                         <span class="text-sm font-medium text-slate-900 dark:text-white">${name}</span>
+                        <div class="size-8 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center text-xs font-bold text-slate-600 dark:text-slate-300 uppercase">
+                            ${name.substring(0, 2)}
+                        </div>
+                        <span class="font-medium text-slate-700 dark:text-slate-200">${name}</span>
                     </div>
-                    <button class="text-slate-300 hover:text-red-500 transition-colors p-2" onclick="deleteAttendant('${name}')" title="Remover">
-                        <span class="material-symbols-outlined">delete</span>
+                    <button onclick="deleteAttendant('${name}')" class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all p-1 rounded-md hover:bg-red-50 dark:hover:bg-red-900/20" title="Remover">
+                        <span class="material-symbols-outlined text-[20px]">delete</span>
                     </button>
                 `;
-                listContainer.appendChild(div);
+                container.appendChild(div);
             });
         }
 
-        function getInitials(name) {
-            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
-        }
-
-        async function addAttendant() {
-            const name = inputName.value.trim();
+        async function saveAttendant() {
+            const input = document.getElementById('new-attendant-name');
+            const name = input.value.trim();
             if (!name) return;
 
-            await fetch('/api/attendants', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: name })
-            });
-
-            inputName.value = '';
-            loadAttendants();
-            alert('Atendente cadastrado com sucesso!');
-        }
-
-        window.deleteAttendant = async function (name) {
-            if (confirm(`Tem certeza que deseja remover "${name}" da equipe?`)) {
-                await fetch(`/api/attendants/${encodeURIComponent(name)}`, { method: 'DELETE' });
-                loadAttendants();
+            try {
+                await fetch('/api/attendants', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name })
+                });
+                input.value = '';
+                fetchAttendants();
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao salvar atendente");
             }
         }
 
-        btnSave.onclick = addAttendant;
-        inputName.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') addAttendant();
+        async function deleteAttendant(name) {
+            if (!confirm(`Remover ${name}?`)) return;
+            try {
+                await fetch(`/api/attendants/${name}`, { method: 'DELETE' });
+                fetchAttendants();
+            } catch (error) {
+                console.error(error);
+                alert("Erro ao remover");
+            }
+        }
+
+        document.getElementById('btn-save-attendant').addEventListener('click', saveAttendant);
+        document.getElementById('new-attendant-name').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') saveAttendant();
         });
 
-        loadAttendants();
+        // Init
+        fetchAttendants();
 
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
     </script>
 </body>
 
