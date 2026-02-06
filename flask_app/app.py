@@ -48,7 +48,7 @@ def reports_page():
 def api_records():
     if request.method == 'GET':
         # Select all records
-        response = supabase.table('records').select("*").execute()
+        response = supabase.table('atendimento_cadastro').select("*").execute()
         records = response.data
         
         # Process JSON fields if necessary
@@ -90,7 +90,7 @@ def api_records():
         # Check if exists (upsert logic)
         # supabase.table('records').upsert(payload).execute() is easiest
         try:
-            supabase.table('records').upsert(payload).execute()
+            supabase.table('atendimento_cadastro').upsert(payload).execute()
         except Exception as e:
             # If fail, returns error. 
             # Note: 'id' must be primary key for upsert to work.
@@ -101,7 +101,7 @@ def api_records():
 @app.route('/api/records/<int:id>', methods=['DELETE'])
 def delete_record(id):
     try:
-        supabase.table('records').delete().eq('id', id).execute()
+        supabase.table('atendimento_cadastro').delete().eq('id', id).execute()
         return jsonify({'status': 'deleted'})
     except Exception as e:
          return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -109,7 +109,7 @@ def delete_record(id):
 @app.route('/api/attendants', methods=['GET', 'POST'])
 def api_attendants():
     if request.method == 'GET':
-        response = supabase.table('attendants').select("name").order('name').execute()
+        response = supabase.table('cadastro_equipe').select("name").order('name').execute()
         # Return list of names
         result = [r['name'] for r in response.data]
         return jsonify(result)
@@ -118,7 +118,7 @@ def api_attendants():
         name = request.json.get('name')
         if name:
             try:
-                supabase.table('attendants').insert({'name': name}).execute()
+                supabase.table('cadastro_equipe').insert({'name': name}).execute()
             except Exception as e:
                 # Ignore duplicate error (like INSERT OR IGNORE)
                 print(f"Error adding attendant: {e}")
@@ -128,7 +128,7 @@ def api_attendants():
 @app.route('/api/attendants/<name>', methods=['DELETE'])
 def delete_attendant(name):
     try:
-        supabase.table('attendants').delete().eq('name', name).execute()
+        supabase.table('cadastro_equipe').delete().eq('name', name).execute()
         return jsonify({'status': 'deleted'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)}), 500
@@ -164,7 +164,7 @@ from collections import Counter
 def api_reports_stats():
     try:
         # Fetch all records
-        response = supabase.table('records').select("*").execute()
+        response = supabase.table('atendimento_cadastro').select("*").execute()
         records = response.data
         
         # Initialize aggregators
