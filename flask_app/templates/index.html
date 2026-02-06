@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Portal de Acesso - Sistema de Gestão</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0f4c81",
+                        "accent": "#137fec",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                    },
+                    fontFamily: {
+                        "display": ["Inter", "sans-serif"]
+                    }
+                },
+            },
+        }
+    </script>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display min-h-screen flex flex-col items-center justify-center p-6">
+
+    <div class="max-w-4xl w-full">
+        <div class="text-center mb-12">
+            <div class="mb-6 flex justify-center">
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-24 w-auto drop-shadow-lg">
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-slate-900 dark:text-white tracking-tight mb-4">
+                AGENDAMENTO DE ATIVIDADES DIARIA - GIC
+            </h1>
+            <p class="text-lg text-slate-600 dark:text-slate-400 font-medium max-w-2xl mx-auto">
+                Atividades da Gerência de Infraestrutura e Conectividade
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <!-- Card 1: Cadastrar Tarefas (Records) -->
+            <a href="/records"
+                class="group relative flex flex-col items-center text-center overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-xl hover:-translate-y-1 hover:ring-primary/50">
+                <div
+                    class="mb-6 flex size-14 items-center justify-center rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-400">
+                    <span class="material-symbols-outlined text-[32px]">table_chart</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Cadastrar Tarefas</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+                    Tabela detalhada de registros, status dos atendentes e filtros avançados.
+                </p>
+                <div class="flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all">
+                    <span>Acessar</span>
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </div>
+            </a>
+
+            <!-- Card 2: Controle Diário (Dashboard) -->
+            <a href="/dashboard"
+                class="group relative flex flex-col items-center text-center overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-xl hover:-translate-y-1 hover:ring-primary/50">
+                <div
+                    class="mb-6 flex size-14 items-center justify-center rounded-xl bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400">
+                    <span class="material-symbols-outlined text-[32px]">dashboard</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Controle Diário</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+                    Visão geral dos atendimentos e métricas.
+                </p>
+                <div class="flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all">
+                    <span>Acessar</span>
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </div>
+            </a>
+
+            <!-- Card 3: Tarefas Finalizadas (Kanban) -->
+            <a href="/kanban"
+                class="group relative flex flex-col items-center text-center overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-xl hover:-translate-y-1 hover:ring-primary/50">
+                <div
+                    class="mb-6 flex size-14 items-center justify-center rounded-xl bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400">
+                    <span class="material-symbols-outlined text-[32px]">view_kanban</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Tarefas Finalizadas</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+                    Visualização em cartões das tarefas concluídas.
+                </p>
+                <div class="flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all">
+                    <span>Acessar</span>
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </div>
+            </a>
+
+            <!-- Card 4: Status Salas (DTI Rooms) -->
+            <a href="/dti/rooms"
+                class="group relative flex flex-col items-center text-center overflow-hidden rounded-2xl bg-white dark:bg-slate-900 p-8 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-xl hover:-translate-y-1 hover:ring-primary/50">
+                <div
+                    class="mb-6 flex size-14 items-center justify-center rounded-xl bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-400">
+                    <span class="material-symbols-outlined text-[32px]">router</span>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-2">Status Salas</h3>
+                <p class="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-6 flex-grow">
+                    Monitoramento de Datacenter, Elétrica, Telecom e Gerador.
+                </p>
+                <div class="flex items-center gap-2 text-primary font-bold text-sm group-hover:gap-3 transition-all">
+                    <span>Acessar</span>
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </div>
+            </a>
+        </div>
+
+        <div class="mt-16 text-center border-t border-slate-200 dark:border-slate-800 pt-8">
+            <!-- Footer removed -->
+        </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn instance to serve proj_gic
+After=network.target
+
+[Service]
+User=root
+Group=www-data
+WorkingDirectory=/var/www/proj_gic/flask_app
+Environment="PATH=/var/www/proj_gic/venv/bin"
+ExecStart=/var/www/proj_gic/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:5001 -m 007 app:app
+
+[Install]
+WantedBy=multi-user.target

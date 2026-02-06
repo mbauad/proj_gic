@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Gestão de Equipe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+    <aside
+        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-20">
+        <div class="flex flex-col p-4">
+            <div class="flex items-center justify-center gap-3 mb-8 px-2">
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-10 w-auto">
+            </div>
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 group transition-colors mb-2 font-bold"
+                    href="/">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="text-sm">Voltar ao Menu</span>
+                </a>
+                <div class="h-px bg-slate-200 dark:bg-slate-700 my-1 mx-2"></div>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dashboard">
+                    <span class="material-symbols-outlined fill-1">dashboard</span>
+                    <span class="text-sm font-medium">Painel</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/records">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <span class="text-sm font-medium">Registros Diários</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-blue-400 group"
+                    href="/team">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="text-sm font-medium">Equipe</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/reports">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <span class="text-sm font-medium">Relatórios</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dti/rooms">
+                    <span class="material-symbols-outlined">router</span>
+                    <span class="text-sm font-medium">Status Salas</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+    <main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-8 shrink-0">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Gestão de Equipe e Atendentes
+            </h2>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-2xl mx-auto flex flex-col gap-6">
+
+                <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 overflow-hidden">
+                    <div class="px-6 py-6 border-b border-white/10">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-1">Cadastrar Novo Atendente</h3>
+                        <p class="text-sm text-slate-500">Adicione novos membros à lista de atendentes disponíveis.</p>
+
+                        <div class="mt-6 flex gap-3">
+                            <input type="text" id="new-attendant-name" placeholder="Nome completo do atendente"
+                                class="flex-1 rounded-lg border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary h-11 px-4">
+                            <button id="btn-save-attendant"
+                                class="flex items-center gap-2 px-6 bg-primary text-white rounded-lg text-sm font-bold hover:bg-blue-600 transition-colors shadow-sm">
+                                <span class="material-symbols-outlined">save</span>
+                                Salvar
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-slate-50/50">
+                        <h3 class="font-bold text-slate-800 dark:text-white">Lista de Atendentes</h3>
+                        <span class="text-xs font-semibold bg-blue-100 text-blue-700 px-2 py-1 rounded-full"
+                            id="count-badge">0</span>
+                    </div>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-700" id="attendants-list-container">
+                        <!-- List Items -->
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        const listContainer = document.getElementById('attendants-list-container');
+        const inputName = document.getElementById('new-attendant-name');
+        const btnSave = document.getElementById('btn-save-attendant');
+        const countBadge = document.getElementById('count-badge');
+
+        async function loadAttendants() {
+            const res = await fetch('/api/attendants');
+            const attendants = await res.json();
+
+            renderList(attendants);
+        }
+
+        function renderList(list) {
+            listContainer.innerHTML = '';
+            countBadge.textContent = list.length;
+
+            if (list.length === 0) {
+                listContainer.innerHTML = `<div class="p-8 text-center text-slate-500">Nenhum atendente cadastrado.</div>`;
+                return;
+            }
+
+            list.forEach(name => {
+                const div = document.createElement('div');
+                div.className = 'px-6 py-4 flex items-center justify-between hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                         <div class="size-8 rounded-full bg-white/5 text-white flex items-center justify-center text-slate-500 font-bold text-xs">
+                            ${getInitials(name)}
+                         </div>
+                         <span class="text-sm font-medium text-slate-900 dark:text-white">${name}</span>
+                    </div>
+                    <button class="text-slate-300 hover:text-red-500 transition-colors p-2" onclick="deleteAttendant('${name}')" title="Remover">
+                        <span class="material-symbols-outlined">delete</span>
+                    </button>
+                `;
+                listContainer.appendChild(div);
+            });
+        }
+
+        function getInitials(name) {
+            return name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+        }
+
+        async function addAttendant() {
+            const name = inputName.value.trim();
+            if (!name) return;
+
+            await fetch('/api/attendants', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: name })
+            });
+
+            inputName.value = '';
+            loadAttendants();
+            alert('Atendente cadastrado com sucesso!');
+        }
+
+        window.deleteAttendant = async function (name) {
+            if (confirm(`Tem certeza que deseja remover "${name}" da equipe?`)) {
+                await fetch(`/api/attendants/${encodeURIComponent(name)}`, { method: 'DELETE' });
+                loadAttendants();
+            }
+        }
+
+        btnSave.onclick = addAttendant;
+        inputName.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') addAttendant();
+        });
+
+        loadAttendants();
+
+    </script>
+</body>
+
+</html>

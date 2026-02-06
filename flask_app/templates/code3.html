@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Portal de Gestão GIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="flask_app/static/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="flask_app/static/css/style.css">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-slate-800 glass-card text-white px-6 py-3 shadow-sm">
+            <div class="flex items-center gap-4">
+                <div class="flex size-10 items-center justify-center rounded-lg bg-brand-dark text-white">
+                    <span class="material-symbols-outlined text-2xl">admin_panel_settings</span>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-slate-900 dark:text-white text-lg font-bold leading-none tracking-tight">GIC</h1>
+                    <p class="text-xs font-semibold text-brand-dark uppercase">Gestão de Atendimento</p>
+                </div>
+            </div>
+            <a href="index.html"
+                class="ml-4 md:hidden flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-dark transition-colors">
+                <span class="material-symbols-outlined text-[20px]">arrow_back</span>
+            </a>
+            <div class="flex flex-1 justify-end gap-6 items-center">
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400 items-center">
+                    <a href="index.html"
+                        class="flex items-center gap-1 text-slate-400 hover:text-brand-dark transition-colors mr-4">
+                        <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                        <span>Menu</span>
+                    </a>
+                    <a class="text-brand-dark font-bold" href="#">Tarefas Diárias</a>
+                    <a class="hover:text-brand-dark transition-colors" href="#">Registros de Atendimento</a>
+                    <a class="hover:text-brand-dark transition-colors" href="#">Análise do Setor</a>
+                </nav>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
+                <button
+                    class="flex items-center gap-3 cursor-pointer rounded-full p-1 pl-3 pr-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all border border-transparent">
+                    <span class="text-sm font-bold text-slate-700 dark:text-slate-200">Coordenador GIC</span>
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-8"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBd3YFgYd8iSwLVJSA6fpmwmGgHexoqV6T6eE68H4HeDes8wJhTdYtUSiRBYjjSX4JObe_wyaxV9CS5tlFv1X4CZXYFa_YpHk965crzgZCoaPyfYZAnicvjXlYpO9Y_q1MYJT0JiC2HhgPtuCphDrOiHdnYB2EEa52oAzOivhB7AWNgQRXp7i6BA7-hqhftEPqVwSXcrh9fOyB_bvm0yfrcJ04EiKf1taDvcwuGVJSgXslN5BJDl18lCyqu8Vz62Frt9JNKogVOVLFN");'>
+                    </div>
+                </button>
+            </div>
+        </header>
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-brand-dark dark:text-primary text-sm font-bold uppercase tracking-[0.2em]">Portal
+                            de
+                            Atendimento</p>
+                        <h2
+                            class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                            Controle de Tarefas Diárias</h2>
+                    </div>
+                    <div
+                        class="flex items-center gap-3 text-slate-700 dark:text-slate-300 glass-card text-white px-5 py-3 rounded-xl border border-slate-800 shadow-sm">
+                        <span class="material-symbols-outlined text-brand-dark">event</span>
+                        <div class="flex flex-col">
+                            <p class="text-[10px] font-bold uppercase text-slate-400">Sessão Atual</p>
+                            <p class="text-sm font-bold">Segunda, 24 Out, 2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="mb-8 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between glass-card text-white p-5 rounded-2xl border border-slate-800 shadow-md">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <button
+                            class="group flex items-center justify-center gap-2 rounded-xl bg-brand-dark px-6 py-3 text-white shadow-lg shadow-blue-900/20 hover:bg-blue-800 transition-all active:scale-95">
+                            <span class="material-symbols-outlined text-[20px]">add_circle</span>
+                            <span class="text-sm font-bold uppercase tracking-wide">Inclusão</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-6 py-3 text-slate-700 dark:text-slate-200 hover:border-brand-dark hover:text-brand-dark transition-all active:scale-95">
+                            <span class="material-symbols-outlined text-[20px]">edit_square</span>
+                            <span class="text-sm font-bold uppercase tracking-wide">Alteração</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-xl border-2 border-transparent bg-red-50 dark:bg-red-950/30 px-6 py-3 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/40 transition-all active:scale-95">
+                            <span class="material-symbols-outlined text-[20px]">delete_forever</span>
+                            <span class="text-sm font-bold uppercase tracking-wide">Exclusão</span>
+                        </button>
+                    </div>
+                    <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden lg:block"></div>
+                    <div class="w-full lg:w-80">
+                        <div class="relative flex w-full items-center">
+                            <span class="absolute left-4 text-slate-400 material-symbols-outlined">search</span>
+                            <input
+                                class="w-full rounded-xl border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50 py-3 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-brand-dark focus:border-transparent text-sm font-medium transition-all"
+                                placeholder="Filtrar tarefas diárias..." />
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div
+                        class="task-card group relative flex flex-col justify-between overflow-hidden rounded-2xl glass-card text-white p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all">
+                        <div class="absolute top-6 right-6">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-brand-dark focus:ring-brand-dark dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="inline-flex items-center rounded-md bg-emerald-100 dark:bg-emerald-900/40 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-400">Concluído</span>
+                                <span class="text-xs font-bold text-slate-400">#GIC-4401</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">Auditoria de
+                                Latência de Rede</h3>
+                        </div>
+                        <div class="space-y-4 pt-4 border-t border-slate-50 dark:border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-slate-200"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC050oaPsLcyauXRhWxutZjqUnl6KSnU3sOyd2fHgYT2lzuIQaKIYnprsXiytwz3F8m3dziPtZXJBEk9ZLJQiolrhughd_oe36fDcdtjjebANxUGpFfLLNe1mLIMgOfJjRbkdnzTRq1h3c2EjOFFtgAffe6IacioseUuSTA31m4IDfHSpX9vAbz4mFiq_anfJIx87RzWtLbV-TyNL9MQdFTLehIGJ8lrD8TFkltCBb1CGDB-blTI7WCvph0Q60zlzK_Qw2Z3VEzXpCB");'>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                            Atendente</p>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200">Sarah Jenkins
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Balcão-A1</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div
+                                    class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 border border-slate-100 dark:border-slate-800">
+                                    <div class="flex items-center gap-1.5 text-brand-dark mb-1">
+                                        <span class="material-symbols-outlined text-base">start</span>
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest">Atendimento</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-white">24 Out, 09:00</p>
+                                </div>
+                                <div
+                                    class="rounded-xl bg-blue-50 dark:bg-blue-900/20 p-3 border border-blue-100 dark:border-blue-900/30 ring-1 ring-brand-dark/20">
+                                    <div class="flex items-center gap-1.5 text-brand-dark mb-1">
+                                        <span class="material-symbols-outlined text-base">verified</span>
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest">Finalização</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-white">24 Out, 11:30</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="task-card group relative flex flex-col justify-between overflow-hidden rounded-2xl glass-card text-white p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all">
+                        <div class="absolute top-6 right-6">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-brand-dark focus:ring-brand-dark dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="inline-flex items-center rounded-md bg-amber-100 dark:bg-amber-900/40 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-400">Em
+                                    Andamento</span>
+                                <span class="text-xs font-bold text-slate-400">#GIC-4402</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">Verificação
+                                de Backup do Sistema</h3>
+                        </div>
+                        <div class="space-y-4 pt-4 border-t border-slate-50 dark:border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-slate-200"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAf_tZ7g2lMQj52sRKPXdlypKPuPbuIWlDWsaI4otKwFhHtwtMdMmaFDePz7fq2sIRy3iaA3IuWNcVieXleQKp3IGWSqw3ibe1jPO3LfsoXjurXt-4fzBrmOy1BcNK-QP6sY7UUtLDQJL5aekPe80HrL8CH2CsCDL24MhyG4ywAgeIwI1jFxw1bwG6mTDOuH9Xrrx5vP3CixddAcYpR-n7dIIu9_jIYsd7tcSzV72nAyIs0WfD_GDxfIcO1eej2n3gAa-U4odd8FRyr");'>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                            Atendente</p>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200">Michael Chen</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">Ops-Ctrl</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div
+                                    class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 border border-slate-100 dark:border-slate-800">
+                                    <div class="flex items-center gap-1.5 text-brand-dark mb-1">
+                                        <span class="material-symbols-outlined text-base">start</span>
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest">Atendimento</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-white">24 Out, 13:15</p>
+                                </div>
+                                <div
+                                    class="rounded-xl bg-slate-100 dark:bg-slate-800/20 p-3 border border-slate-200 dark:border-slate-700 opacity-60">
+                                    <div class="flex items-center gap-1.5 text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-base">timer</span>
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest">Finalização</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-400 uppercase">Pendente</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="task-card group relative flex flex-col justify-between overflow-hidden rounded-2xl glass-card text-white p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all">
+                        <div class="absolute top-6 right-6">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-brand-dark focus:ring-brand-dark dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span
+                                    class="inline-flex items-center rounded-md bg-red-100 dark:bg-red-900/40 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-red-700 dark:text-red-400">Crítico</span>
+                                <span class="text-xs font-bold text-slate-400">#GIC-4405</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900 dark:text-white leading-snug">Patch de
+                                Segurança de Firewall</h3>
+                        </div>
+                        <div class="space-y-4 pt-4 border-t border-slate-50 dark:border-slate-800">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-9 border border-slate-200"
+                                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBELhDqCEp3gGMg9cCL5T_wCzPaltwB0sBcLOdTp6E0WisDeC2jbQe6IONPsMziRBA4ezi8E2m584CZsrbATjQ2JYLaF-okkemRLwfbN92yO21Pf2faCJxaZ7Xt7vimMgl-Sv8VUXnkiB16eLcKPnYG6UjLVKXXM0fmysuSYH-ZU25XgQcVlBm0meoKbbjS4qRVSlPMx7p0GtaEw12XD-Dup3JfEaZtn5Zp_gymRguDIGGV4f5IuSUhO0Kae19HxZmZ77NF7c97nUMW");'>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                            Atendente</p>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200">Lisa Wong</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">TI-Lead</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div
+                                    class="rounded-xl bg-slate-50 dark:bg-slate-800/40 p-3 border border-slate-100 dark:border-slate-800">
+                                    <div class="flex items-center gap-1.5 text-brand-dark mb-1">
+                                        <span class="material-symbols-outlined text-base">start</span>
+                                        <span
+                                            class="text-[10px] font-black uppercase tracking-widest">Atendimento</span>
+                                    </div>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-white">24 Out, 15:00</p>
+                                </div>
+                                <div
+                                    class="rounded-xl bg-red-50 dark:bg-red-900/20 p-3 border border-red-200 dark:border-red-800">
+                                    <div class="flex items-center gap-1.5 text-red-500 mb-1">
+                                        <span class="material-symbols-outlined text-base">emergency</span>
+                                        <span class="text-[10px] font-black uppercase tracking-widest">Prazo</span>
+                                    </div>
+                                    <p class="text-sm font-black text-red-600 dark:text-red-400">URGENTE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-slate-800 pt-8">
+                    <div class="flex items-center gap-4">
+                        <div class="text-sm font-medium text-slate-500">
+                            Mostrando <span class="font-bold text-slate-900 dark:text-white">12</span> de <span
+                                class="font-bold text-slate-900 dark:text-white">48</span> tarefas diárias
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button
+                            class="px-4 py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-sm font-bold hover:bg-white dark:hover:bg-slate-800 transition-colors">Anterior</button>
+                        <button
+                            class="px-4 py-2 rounded-lg bg-brand-dark text-white text-sm font-bold hover:bg-blue-800 transition-colors shadow-sm">Próxima
+                            Página</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

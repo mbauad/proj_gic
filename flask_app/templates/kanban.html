@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tarefas Finalizadas - GIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-slate-800 glass-panel text-white px-6 py-3 shadow-sm">
+            <div class="flex items-center gap-4">
+                <a href="/"
+                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors font-bold mr-2">
+                    <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+                    <span class="hidden md:inline">Menu</span>
+                </a>
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-12 w-auto">
+            </div>
+
+            <div class="flex flex-1 justify-end gap-6 items-center">
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400 items-center">
+                    <a class="text-brand-dark font-bold" href="/kanban">Tarefas Finalizadas</a>
+                    <a class="hover:text-brand-dark transition-colors" href="/records">Registros de Atendimento</a>
+                    <a class="hover:text-brand-dark transition-colors" href="/dashboard">Painel</a>
+                    <a class="hover:text-brand-dark transition-colors" href="/dti/rooms">Status Salas</a>
+                </nav>
+            </div>
+        </header>
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                    <div class="flex flex-col gap-1">
+                        <p class="text-brand-dark dark:text-primary text-sm font-bold uppercase tracking-[0.2em]">Portal
+                            de
+                            Atendimento</p>
+                        <h2
+                            class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                            Tarefas Finalizadas</h2>
+                    </div>
+                </div>
+
+                <!-- Dynamic Grid Content -->
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3" id="kanban-grid">
+                    <!-- Cards will be injected here -->
+                    <div class="col-span-full text-center py-10 text-slate-500">
+                        Carregando tarefas finalizadas...
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const gridContainer = document.getElementById('kanban-grid');
+
+        async function loadTasks() {
+            try {
+                const res = await fetch('/api/records');
+                const allRecords = await res.json();
+                // Filter only completed tasks
+                const records = allRecords.filter(r => r.status === 'Concluído');
+                renderKanban(records);
+            } catch (error) {
+                console.error("Erro ao carregar tarefas:", error);
+                gridContainer.innerHTML = '<div class="col-span-full text-center py-10 text-red-500">Erro ao carregar dados.</div>';
+            }
+        }
+
+        function renderKanban(records) {
+            gridContainer.innerHTML = '';
+
+            if (records.length === 0) {
+                gridContainer.innerHTML = '<div class="col-span-full text-center py-10 text-slate-500">Nenhuma tarefa finalizada encontrada.</div>';
+                return;
+            }
+
+            records.forEach(record => {
+                let displayAttendant = Array.isArray(record.attendant) ? record.attendant.join(', ') : record.attendant;
+                let statusColor = 'bg-emerald-100 text-emerald-700 ring-emerald-600/20'; // Always finished here
+
+                const cardHTML = `
+                    <div class="task-card group relative flex flex-col justify-between overflow-hidden rounded-2xl glass-card text-white p-6 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:ring-primary/50">
+                        <button onclick="deleteTask(${record.id})" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100" title="Excluir Tarefa">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                        </button>
+                        <div class="mb-5">
+                            <div class="flex items-center gap-2 mb-2">
+                                <span class="inline-flex items-center rounded-md px-2 py-0.5 text-[10px] font-black uppercase tracking-wider ${statusColor}">${record.status}</span>
+                                <span class="text-xs font-bold text-slate-400">#SVC-${1000 + record.id}</span>
+                            </div>
+                            <h3 class="text-lg font-extrabold text-slate-900 dark:text-white leading-snug pr-8">${record.task || 'Tarefa sem título'}</h3>
+                        </div>
+                        <div class="space-y-4 pt-4 border-t border-slate-50 dark:border-white/10">
+                            <div class="flex items-center justify-between">
+                                <div class="flex items-center gap-3">
+                                    <div class="flex items-center justify-center size-9 rounded-full bg-slate-100 dark:bg-white/10 text-slate-500">
+                                         <span class="material-symbols-outlined text-[18px]">person</span>
+                                    </div>
+                                    <div>
+                                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Atendente</p>
+                                        <p class="text-sm font-bold text-slate-800 dark:text-slate-200">${displayAttendant || 'N/A'}</p>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-600 dark:text-slate-400">${record.secretary || 'N/A'}</p>
+                                </div>
+                            </div>
+                             <div class="flex justify-between items-center text-xs text-slate-500 mt-2">
+                                <span>Início: ${record.date || '--'}</span>
+                                <span class="text-emerald-400 font-bold">Fim: ${record.endDate || '--'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
+        }
+
+        async function deleteTask(id) {
+            if (confirm('Tem certeza que deseja excluir esta tarefa do histórico?')) {
+                try {
+                    await fetch(`/api/records/${id}`, { method: 'DELETE' });
+                    loadTasks();
+                } catch (error) {
+                    console.error("Erro ao excluir:", error);
+                    alert("Erro ao excluir tarefa.");
+                }
+            }
+        }
+
+        loadTasks();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Status da Salas do DTI - Belém Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .status-input {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            width: 100%;
+        }
+
+        .status-select {
+            background-color: rgba(30, 41, 59, 1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            color: white;
+            padding: 4px 8px;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()"
+        class="fixed inset-0 bg-black/50 z-10 hidden md:hidden glass-effect"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar"
+        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-20 transform -translate-x-full md:translate-x-0 transition-transform duration-300 ease-in-out">
+        <div class="flex flex-col p-4">
+            <div class="flex items-center justify-center gap-3 mb-8 px-2">
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-10 w-auto">
+            </div>
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 group transition-colors mb-2 font-bold"
+                    href="/">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="text-sm">Voltar ao Menu</span>
+                </a>
+                <div class="h-px bg-slate-200 dark:bg-slate-700 my-1 mx-2"></div>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dashboard">
+                    <span class="material-symbols-outlined fill-1">dashboard</span>
+                    <span class="text-sm font-medium">Painel</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/records">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <span class="text-sm font-medium">Registros Diários</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/team">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="text-sm font-medium">Equipe</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/reports">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <span class="text-sm font-medium">Relatórios</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-blue-400 group"
+                    href="/dti/rooms">
+                    <span class="material-symbols-outlined">router</span>
+                    <span class="text-sm font-medium">Status Salas</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="md:ml-64 flex-1 flex flex-col h-screen overflow-hidden relative">
+        <!-- Header -->
+        <header
+            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-4 md:px-8 shrink-0">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-white hover:text-blue-400 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">menu</span>
+                </button>
+                <h2 class="text-lg md:text-xl font-bold text-slate-800 dark:text-white tracking-tight truncate">Status
+                    Salas</h2>
+            </div>
+            <div class="flex items-center gap-2 md:gap-4">
+                <div class="flex items-center gap-4 bg-slate-900/50 p-1.5 px-3 rounded border border-white/20">
+                    <span class="text-white font-bold uppercase tracking-wider text-xs">Data</span>
+                    <input type="date" id="reportDate"
+                        class="bg-transparent border-none text-white font-bold focus:ring-0 p-0 text-sm"
+                        onchange="loadData()">
+                </div>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-7xl mx-auto w-full">
+
+                <div class="mb-6">
+                    <h2 class="text-lg font-bold text-yellow-500 uppercase tracking-widest mb-1">DTI</h2>
+                    <h1 class="text-2xl font-bold text-slate-900 dark:text-white mb-1">Atividades da Gerência de
+                        Infraestrutura e Conectividade</h1>
+                    <p class="text-slate-500 text-sm tracking-widest uppercase">Monitoramento Diário</p>
+                </div>
+
+                <form id="statusForm" onsubmit="event.preventDefault(); saveData();">
+                    <!-- DATACENTER Section -->
+                    <div class="mb-6 border-2 border-white/20 rounded-lg p-1 bg-slate-900/40">
+                        <div class="bg-slate-800/80 p-2 flex justify-between items-center border-b border-white/10">
+                            <h3 class="text-white font-bold uppercase">DATACENTER</h3>
+                        </div>
+                        <div class="p-4 grid grid-cols-12 gap-4 text-white">
+                            <!-- Rodizio -->
+                            <div class="md:col-span-12 flex justify-end items-center gap-4 mb-2">
+                                <span class="font-bold">Rodízio</span>
+                                <select name="datacenter_rodizio" id="datacenter_rodizio"
+                                    class="status-select bg-green-700 w-40 text-center font-bold">
+                                    <option value="Rodízio OK">Rodízio OK</option>
+                                    <option value="Rodízio Desabilitado">Rodízio Desabilitado</option>
+                                    <option value="Sem status">Sem status</option>
+                                </select>
+                            </div>
+
+                            <!-- Headers (Desktop Only) -->
+                            <div
+                                class="hidden md:block md:col-span-4 text-center font-bold border-b border-white/20 pb-2">
+                            </div>
+                            <div
+                                class="hidden md:block md:col-span-3 text-center font-bold border-b border-white/20 pb-2">
+                                Temperatura</div>
+                            <div
+                                class="hidden md:block md:col-span-3 text-center font-bold border-b border-white/20 pb-2">
+                                Umidade</div>
+                            <div
+                                class="hidden md:block md:col-span-2 text-center font-bold border-b border-white/20 pb-2">
+                                Ocorrências</div>
+
+                            <!-- Ar Precisão 01 -->
+                            <div
+                                class="col-span-12 md:col-span-4 font-bold text-yellow-400 pl-4 py-2 bg-blue-900/30 rounded">
+                                Ar
+                                Precisão 01</div>
+                            <div
+                                class="col-span-6 md:col-span-3 flex items-center justify-center bg-blue-900/30 rounded relative group">
+                                <span
+                                    class="md:hidden absolute -top-2 left-2 text-[10px] text-slate-400 bg-slate-900 px-1">Temp</span>
+                                <input type="text" name="datacenter_ar1_temp" id="datacenter_ar1_temp"
+                                    class="bg-transparent border-none text-center w-full font-bold focus:ring-0"
+                                    placeholder="00,00" oninput="formatMeasurement(this)">
+                                <span>°C</span>
+                            </div>
+                            <div
+                                class="col-span-6 md:col-span-3 flex items-center justify-center bg-blue-900/30 rounded relative">
+                                <span
+                                    class="md:hidden absolute -top-2 left-2 text-[10px] text-slate-400 bg-slate-900 px-1">Umid</span>
+                                <input type="text" name="datacenter_ar1_humidity" id="datacenter_ar1_humidity"
+                                    class="bg-transparent border-none text-center w-full font-bold focus:ring-0"
+                                    placeholder="00,00" oninput="formatMeasurement(this)">
+                                <span>g/m³</span>
+                            </div>
+                            <div class="col-span-12 md:col-span-2 bg-blue-900/30 rounded">
+                                <select name="datacenter_ar1_status" id="datacenter_ar1_status"
+                                    class="status-select bg-green-700 w-full text-center font-bold h-full border-none">
+                                    <option value="Sem status">Sem status</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Temperatura Alta">Temperatura Alta</option>
+                                    <option value="Em Falha">Em Falha</option>
+                                    <option value="Ausência de Fase">Ausência de Fase</option>
+                                    <option value="Desligado">Desligado</option>
+                                </select>
+                            </div>
+
+                            <!-- Ar Precisão 02 -->
+                            <div
+                                class="col-span-12 md:col-span-4 font-bold text-yellow-400 pl-4 py-2 bg-blue-900/30 rounded">
+                                Ar
+                                Precisão 02</div>
+                            <div
+                                class="col-span-6 md:col-span-3 flex items-center justify-center bg-blue-900/30 rounded relative">
+                                <span
+                                    class="md:hidden absolute -top-2 left-2 text-[10px] text-slate-400 bg-slate-900 px-1">Temp</span>
+                                <input type="text" name="datacenter_ar2_temp" id="datacenter_ar2_temp"
+                                    class="bg-transparent border-none text-center w-full font-bold focus:ring-0"
+                                    placeholder="00,00" oninput="formatMeasurement(this)">
+                                <span>°C</span>
+                            </div>
+                            <div
+                                class="col-span-6 md:col-span-3 flex items-center justify-center bg-blue-900/30 rounded relative">
+                                <span
+                                    class="md:hidden absolute -top-2 left-2 text-[10px] text-slate-400 bg-slate-900 px-1">Umid</span>
+                                <input type="text" name="datacenter_ar2_humidity" id="datacenter_ar2_humidity"
+                                    class="bg-transparent border-none text-center w-full font-bold focus:ring-0"
+                                    placeholder="00,00" oninput="formatMeasurement(this)">
+                                <span>g/m³</span>
+                            </div>
+                            <div class="col-span-12 md:col-span-2 bg-blue-900/30 rounded">
+                                <select name="datacenter_ar2_status" id="datacenter_ar2_status"
+                                    class="status-select bg-red-700 w-full text-center font-bold h-full border-none">
+                                    <option value="Sem status">Sem status</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Temperatura Alta">Temperatura Alta</option>
+                                    <option value="Em Falha">Em Falha</option>
+                                    <option value="Ausência de Fase">Ausência de Fase</option>
+                                    <option value="Desligado">Desligado</option>
+                                </select>
+                            </div>
+
+                            <!-- Ar de Backup -->
+                            <div
+                                class="col-span-12 md:col-span-4 font-bold text-yellow-400 pl-4 py-2 bg-blue-900/30 rounded">
+                                Ar de
+                                Backup</div>
+                            <div class="hidden md:block md:col-span-6 bg-blue-900/30 rounded opacity-50"></div>
+                            <!-- Placeholder -->
+                            <div class="col-span-12 md:col-span-2 bg-blue-900/30 rounded">
+                                <select name="datacenter_backup_status" id="datacenter_backup_status"
+                                    class="status-select bg-stone-300 text-black w-full text-center font-bold h-full border-none">
+                                    <option value="Sem status">Sem status</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Temperatura Alta">Temperatura Alta</option>
+                                    <option value="Em Falha">Em Falha</option>
+                                    <option value="Ausência de Fase">Ausência de Fase</option>
+                                    <option value="Desligado">Desligado</option>
+                                </select>
+                            </div>
+
+                        </div>
+                        <!-- Observations -->
+                        <div class="bg-slate-300/20 p-2 flex items-center gap-2 border-t border-white/10 m-1 rounded">
+                            <span class="font-bold text-black dark:text-white uppercase text-sm">Observações:</span>
+                            <input type="text" name="datacenter_obs" id="datacenter_obs"
+                                class="bg-transparent border-none text-yellow-400 w-full italic placeholder-slate-400 focus:ring-0"
+                                placeholder="Insira observações aqui...">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- SALA ELÉTRICA Section -->
+                        <div class="border-2 border-white/20 rounded-lg p-1 bg-slate-900/40">
+                            <div class="bg-slate-800/80 p-2 flex justify-between items-center border-b border-white/10">
+                                <h3 class="text-white font-bold uppercase">SALA ELÉTRICA</h3>
+                            </div>
+                            <div class="p-4 space-y-2 text-white text-sm">
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Ar condicionado
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="electric_ac_status" id="electric_ac_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak TS SHARA
+                                        01</div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_shara1_status"
+                                            id="electric_nobreak_shara1_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak TS SHARA
+                                        02</div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_shara2_status"
+                                            id="electric_nobreak_shara2_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak TS SHARA
+                                        03</div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_shara3_status"
+                                            id="electric_nobreak_shara3_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak APC 01
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_apc1_status" id="electric_nobreak_apc1_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak APC 02
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_apc2_status" id="electric_nobreak_apc2_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Nobreak APC 03
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="electric_nobreak_apc3_status" id="electric_nobreak_apc3_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Em By-Pass">Em By-Pass</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Falha">Falha</option>
+                                            <option value="Manutenção">Manutenção</option>
+                                            <option value="Observação">Observação</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Observations -->
+                            <div
+                                class="bg-slate-300/20 p-2 flex items-start gap-2 border-t border-white/10 m-1 rounded h-20">
+                                <span class="font-bold text-black dark:text-white uppercase text-xs">Observações:</span>
+                                <textarea name="electric_obs" id="electric_obs"
+                                    class="bg-transparent border-none text-yellow-400 w-full italic placeholder-slate-400 focus:ring-0 text-xs p-0 resize-none h-full"
+                                    placeholder="Insira observações aqui..."></textarea>
+                            </div>
+                        </div>
+
+                        <!-- SALA TELECOM Section -->
+                        <div class="border-2 border-white/20 rounded-lg p-1 bg-slate-900/40 flex flex-col">
+                            <div class="bg-slate-800/80 p-2 flex justify-between items-center border-b border-white/10">
+                                <h3 class="text-white font-bold uppercase">SALA TELECOM</h3>
+                            </div>
+                            <div class="p-4 space-y-4 text-white text-sm grow">
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Ar condicionado 1
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="telecom_ac1_status" id="telecom_ac1_status"
+                                            class="status-select bg-green-700 text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Congelando Condensador">Congelando Condensador</option>
+                                            <option value="Vazamento de Água">Vazamento de Água</option>
+                                            <option value="Desligado">Desligado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center">
+                                    <div class="col-span-7 font-bold text-yellow-400 text-right pr-4">Ar condicionado 2
+                                    </div>
+                                    <div class="col-span-5">
+                                        <select name="telecom_ac2_status" id="telecom_ac2_status"
+                                            class="status-select bg-amber-100 text-black text-center font-bold text-xs py-1">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Normal">Normal</option>
+                                            <option value="Temperatura Alta">Temperatura Alta</option>
+                                            <option value="Congelando Condensador">Congelando Condensador</option>
+                                            <option value="Vazamento de Água">Vazamento de Água</option>
+                                            <option value="Desligado">Desligado</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Observations -->
+                            <div
+                                class="bg-slate-300/20 p-2 flex items-start gap-2 border-t border-white/10 m-1 rounded h-20">
+                                <span class="font-bold text-black dark:text-white uppercase text-xs">Observações:</span>
+                                <textarea name="telecom_obs" id="telecom_obs"
+                                    class="bg-transparent border-none text-yellow-400 w-full italic placeholder-slate-400 focus:ring-0 text-xs p-0 resize-none h-full"
+                                    placeholder="Insira observações aqui..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grupo Gerador -->
+                    <div class="card p-1 rounded-lg border border-white/20 glass-effect mt-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Left Side: Status -->
+                            <div class="border border-white/20 p-2 rounded relative">
+                                <h3 class="font-bold text-white mb-2 border-b border-white/20 pb-1">GRUPO GERADOR</h3>
+                                <div class="absolute top-2 right-2 font-bold text-white">Status</div>
+
+                                <div class="grid grid-cols-12 gap-2 items-center mt-6">
+                                    <div class="col-span-5 font-bold text-white text-right pr-4">GDD</div>
+                                    <div class="col-span-7">
+                                        <select name="generator_gdd" id="generator_gdd"
+                                            class="status-select bg-yellow-400 text-black text-center font-bold text-xs py-1 rounded w-full">
+                                            <option value="Sem status">Sem status</option>
+                                            <option value="Em Repouso">Em Repouso</option>
+                                            <option value="Automático">Automático</option>
+                                            <option value="Em Falha">Em Falha</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center mt-2">
+                                    <div class="col-span-5 font-bold text-white text-right pr-4">Nível de Combustível
+                                        [l]</div>
+                                    <div class="col-span-7">
+                                        <input type="text" name="generator_fuel_level" id="generator_fuel_level"
+                                            class="bg-blue-300/80 text-black text-center font-bold text-xs py-1 rounded w-full border-none"
+                                            placeholder="80 litros" onblur="formatFuelLevel(this)"
+                                            onfocus="removeSuffix(this, ' litros')">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center mt-2">
+                                    <div class="col-span-5 font-bold text-white text-right pr-4">Nível Percentual [%]
+                                    </div>
+                                    <div class="col-span-7">
+                                        <input type="text" name="generator_fuel_percent" id="generator_fuel_percent"
+                                            class="bg-blue-900/50 text-yellow-400 text-center font-bold text-xs py-1 rounded w-full border-none"
+                                            placeholder="32 %" onblur="formatPercent(this)"
+                                            onfocus="removeSuffix(this, ' %')">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-12 gap-2 items-center mt-2">
+                                    <div class="col-span-5 font-bold text-white text-right pr-4">Data da Próxima Revisão
+                                    </div>
+                                    <div class="col-span-7">
+                                        <input type="text" name="generator_next_review" id="generator_next_review"
+                                            class="bg-blue-300/80 text-black text-center font-bold text-xs py-1 rounded w-full border-none"
+                                            placeholder="10/03/2026" oninput="formatDate(this)" maxlength="10">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Side: Observations -->
+                            <div class="border border-white/20 p-2 rounded flex flex-col">
+                                <h3 class="font-bold text-white mb-2 border-b border-white/20 pb-1 text-center">
+                                    Observações:
+                                </h3>
+                                <textarea name="generator_obs" id="generator_obs"
+                                    class="bg-transparent border-none w-full h-full text-yellow-300 italic focus:ring-0 placeholder-gray-500 resize-none p-2 text-sm"
+                                    placeholder="Insira observações aqui..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="mt-4 flex flex-col md:flex-row justify-end gap-4">
+                        <span id="lastUpdated"
+                            class="text-xs text-slate-400 self-center md:mr-auto mb-2 md:mb-0 text-center md:text-left"></span>
+                        <button type="button" onclick="exportDTIPDF()"
+                            class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 md:py-2 px-6 rounded shadow-lg transition-colors border border-slate-600 w-full md:w-auto">
+                            <span class="flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+                                Gerar Relatório
+                            </span>
+                        </button>
+                        <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 md:py-2 px-6 rounded shadow-lg transition-colors w-full md:w-auto">
+                            Salvar Dados
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-8 text-right text-sm text-slate-300">
+                    <p>A data acima é a da última verificação. As verificações devem ser feitas até às 8:30h.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- JS for Sidebar -->
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Open
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                // Close
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
+    <script>
+        // Set today's date
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('reportDate').value = today;
+            loadData();
+        });
+
+        // Function to colorize selects based on value
+        const selects = document.querySelectorAll('select.status-select');
+        selects.forEach(select => {
+            select.addEventListener('change', function () {
+                updateSelectColor(this);
+            });
+            // Initial check
+            updateSelectColor(select);
+        });
+
+        function updateSelectColor(select) {
+            select.classList.remove('bg-green-700', 'bg-red-600', 'bg-red-700', 'bg-stone-300', 'text-black', 'text-white', 'bg-amber-100', 'bg-orange-500', 'bg-rose-300', 'text-red-900', 'bg-yellow-400', 'bg-red-800', 'bg-amber-600', 'bg-sky-300', 'bg-blue-600');
+
+            const value = select.value;
+            if (value === 'Normal' || value === 'Rodízio OK') {
+                select.classList.add('bg-green-700', 'text-white');
+            } else if (value === 'Em Falha' || value === 'Falha' || value === 'Rodízio Desabilitado' || value === 'Temperatura Alta' || value === 'Em Falha') {
+                select.classList.add('bg-red-600', 'text-white');
+            } else if (value === 'Ausência de Fase') {
+                select.classList.add('bg-rose-300', 'text-red-900');
+            } else if (value === 'Desligado') {
+                select.classList.add('bg-stone-300', 'text-black');
+            } else if (value === 'Sem status') {
+                select.classList.add('bg-amber-100', 'text-black');
+            } else if (value === 'Em By-Pass' || value === 'Automático') {
+                select.classList.add('bg-yellow-400', 'text-black');
+            } else if (value === 'Manutenção') {
+                select.classList.add('bg-red-800', 'text-white');
+            } else if (value === 'Observação') {
+                select.classList.add('bg-amber-600', 'text-white');
+            } else if (value === 'Congelando Condensador') {
+                select.classList.add('bg-sky-300', 'text-black');
+            } else if (value === 'Vazamento de Água') {
+                select.classList.add('bg-blue-600', 'text-white');
+            } else if (value === 'Em Repouso') {
+                select.classList.add('bg-green-700', 'text-white');
+            } else if (value === 'Manual') {
+                select.classList.add('bg-stone-300', 'text-black');
+            } else {
+                select.classList.add('bg-slate-700', 'text-white');
+            }
+        }
+
+        function formatMeasurement(input) {
+            let value = input.value.replace(/\D/g, '');
+
+            if (value.length === 0) {
+                input.value = '';
+                return;
+            }
+
+            value = parseInt(value).toString();
+
+            if (value.length < 2) {
+                value = '00,' + value.padStart(2, '0');
+            } else if (value.length === 2) {
+                value = '00,' + value;
+            } else {
+                value = value.slice(0, -2) + ',' + value.slice(-2);
+            }
+
+            // Remove leading zeros before comma if integer part > 0
+            const parts = value.split(',');
+            if (parts[0].length > 2 && parts[0].startsWith('0')) {
+                parts[0] = parseInt(parts[0]).toString();
+                value = parts.join(',');
+            }
+            // Handle simple cases 
+            if (value.startsWith('00') && value.length > 5) {
+                // Clean up excessive leading zeros if needed, but parseInt logic usually handles it
+            }
+
+            input.value = value;
+        }
+
+        function formatFuelLevel(input) {
+            let value = input.value.replace(' litros', '').trim();
+            if (value) {
+                input.value = value + ' litros';
+            }
+        }
+
+        function formatPercent(input) {
+            let value = input.value.replace(' %', '').trim();
+            if (value) {
+                input.value = value + ' %';
+            }
+        }
+
+        function removeSuffix(input, suffix) {
+            input.value = input.value.replace(suffix, '').trim();
+        }
+
+        function formatDate(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length > 8) value = value.slice(0, 8);
+
+            if (value.length > 4) {
+                value = value.slice(0, 2) + '/' + value.slice(2, 4) + '/' + value.slice(4);
+            } else if (value.length > 2) {
+                value = value.slice(0, 2) + '/' + value.slice(2);
+            }
+
+            input.value = value;
+        }
+
+        async function loadData() {
+            const date = document.getElementById('reportDate').value;
+            try {
+                const response = await fetch(`/api/dti/rooms/latest?date=${date}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data && data.status !== 'no_data') {
+                        // Populate form
+                        for (const key in data) {
+                            const input = document.getElementById(key);
+                            if (input) {
+                                input.value = data[key];
+                                if (input.tagName === 'SELECT') {
+                                    updateSelectColor(input);
+                                }
+                            }
+                        }
+                        if (data.updated_at) {
+                            document.getElementById('lastUpdated').innerText = `Última atualização: ${new Date(data.updated_at).toLocaleString()}`;
+                        }
+                    } else {
+                        // Clear form or set defaults if no data for this date
+                        // Ideally we could clear inputs here if we want strict daily views
+                        document.getElementById('lastUpdated').innerText = '';
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        async function saveData() {
+            const formData = new FormData();
+            const inputs = document.querySelectorAll('#statusForm input, #statusForm select, #statusForm textarea');
+            const data = {};
+
+            inputs.forEach(input => {
+                data[input.id] = input.value;
+            });
+
+            data['date'] = document.getElementById('reportDate').value;
+
+            try {
+                const response = await fetch('/api/dti/rooms', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    alert('Dados salvos com sucesso!');
+                    loadData(); // Reload to ensure sync
+                } else {
+                    alert('Erro ao salvar dados.');
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+                alert('Erro na comunicação com o servidor.');
+            }
+        }
+
+        async function exportDTIPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const date = document.getElementById('reportDate').value.split('-').reverse().join('/');
+
+            // Header
+            doc.setFillColor(15, 23, 42); // slate-900 like
+            doc.rect(0, 0, 210, 40, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(22);
+            doc.setFont('helvetica', 'bold');
+            doc.text('DTI - BELÉM DIGITAL', 14, 18);
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'normal');
+            doc.text('Atividades da Gerência de Infraestrutura e Conectividade', 14, 26);
+
+            doc.setFontSize(10);
+            doc.setTextColor(200, 200, 200);
+            doc.text('STATUS DAS SALAS / GRUPO GERADOR', 14, 34);
+
+            doc.setFontSize(12);
+            doc.setTextColor(255, 255, 255);
+            doc.text(`Data: ${date}`, 160, 26);
+
+            let yPos = 50;
+
+            // Helper for sections
+            const addSectionHeader = (title, y) => {
+                doc.setFillColor(30, 41, 59); // slate-800
+                doc.rect(14, y, 182, 10, 'F');
+                doc.setTextColor(255, 255, 255);
+                doc.setFontSize(12);
+                doc.setFont('helvetica', 'bold');
+                doc.text(title, 18, y + 7);
+                return y + 15;
+            };
+
+            const addField = (label, value, x, y, width = 182, isAlert = false) => {
+                doc.setFontSize(10);
+                doc.setTextColor(80, 80, 80);
+                doc.setFont('helvetica', 'bold');
+                doc.text(label, x, y);
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                if (isAlert && value !== 'Normal' && value !== 'Rodízio OK' && value !== 'Sem status' && value !== 'Automático' && value !== 'Em Repouso') {
+                    doc.setTextColor(220, 38, 38); // Red
+                } else {
+                    doc.setTextColor(0, 0, 0);
+                }
+                const cleanValue = value ? value : '--';
+                doc.text(cleanValue, x + 60, y);
+            };
+
+            // DATACENTER
+            yPos = addSectionHeader('DATACENTER', yPos);
+
+            const rodizio = document.getElementById('datacenter_rodizio').value;
+            addField('Rodízio:', rodizio, 18, yPos, 182, true); yPos += 10;
+
+            doc.setDrawColor(200);
+            doc.line(18, yPos, 190, yPos); yPos += 5; // Separator
+
+            // Table Header style simulation
+            doc.setFontSize(9);
+            doc.setTextColor(100);
+            doc.text('Item', 18, yPos);
+            doc.text('Temp (°C)', 80, yPos);
+            doc.text('Umid (g/m³)', 110, yPos);
+            doc.text('Status', 140, yPos);
+            yPos += 5;
+
+            const dcItems = [
+                { name: 'Ar Precisão 01', t: 'datacenter_ar1_temp', h: 'datacenter_ar1_humidity', s: 'datacenter_ar1_status' },
+                { name: 'Ar Precisão 02', t: 'datacenter_ar2_temp', h: 'datacenter_ar2_humidity', s: 'datacenter_ar2_status' },
+                { name: 'Ar de Backup', s: 'datacenter_backup_status' }
+            ];
+
+            dcItems.forEach(item => {
+                doc.setFontSize(10);
+                doc.setTextColor(0);
+                doc.text(item.name, 18, yPos);
+
+                if (item.t) doc.text(document.getElementById(item.t).value || '--', 80, yPos);
+                if (item.h) doc.text(document.getElementById(item.h).value || '--', 110, yPos);
+
+                const status = document.getElementById(item.s).value;
+                if (status !== 'Normal' && status !== 'Sem status') doc.setTextColor(220, 38, 38);
+                doc.text(status, 140, yPos);
+                doc.setTextColor(0);
+                yPos += 7;
+            });
+
+            yPos += 5;
+            const dcObs = document.getElementById('datacenter_obs').value;
+            if (dcObs) {
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text('Observações:', 18, yPos);
+                doc.setTextColor(50);
+                var splitObs = doc.splitTextToSize(dcObs, 160);
+                doc.text(splitObs, 40, yPos);
+                yPos += (splitObs.length * 5) + 5;
+            } else {
+                yPos += 5;
+            }
+
+            // ELETRICA
+            yPos += 5;
+            yPos = addSectionHeader('SALA ELÉTRICA', yPos);
+
+            const electricItems = [
+                { l: 'Ar Condicionado', s: 'electric_ac_status' },
+                { l: 'Nobreak TS SHARA 01', s: 'electric_nobreak_shara1_status' },
+                { l: 'Nobreak TS SHARA 02', s: 'electric_nobreak_shara2_status' },
+                { l: 'Nobreak TS SHARA 03', s: 'electric_nobreak_shara3_status' },
+                { l: 'Nobreak APC 01', s: 'electric_nobreak_apc1_status' },
+                { l: 'Nobreak APC 02', s: 'electric_nobreak_apc2_status' },
+                { l: 'Nobreak APC 03', s: 'electric_nobreak_apc3_status' },
+            ];
+
+            // Check page break
+            if (yPos > 250) { doc.addPage(); yPos = 20; }
+
+            const startY = yPos;
+            electricItems.forEach((item, index) => {
+                if (index === 4 && yPos > 240) { doc.addPage(); yPos = 20; } // Simple split
+                doc.setFontSize(10);
+                doc.setTextColor(0);
+                doc.text(item.l, 18, yPos);
+
+                const status = document.getElementById(item.s).value;
+                if (status !== 'Normal' && status !== 'Sem status') doc.setTextColor(220, 38, 38);
+                doc.text(status, 100, yPos);
+                doc.setTextColor(0);
+                yPos += 6;
+            });
+
+            yPos += 2;
+            const elObs = document.getElementById('electric_obs').value;
+            if (elObs) {
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text('Observações:', 18, yPos);
+                doc.setTextColor(50);
+                var splitObs = doc.splitTextToSize(elObs, 140);
+                doc.text(splitObs, 40, yPos);
+                yPos += (splitObs.length * 5) + 5;
+            }
+
+            // TELECOM
+            yPos += 5;
+            if (yPos > 250) { doc.addPage(); yPos = 20; }
+            yPos = addSectionHeader('SALA TELECOM', yPos);
+
+            const telecomItems = [
+                { l: 'Ar Condicionado 1', s: 'telecom_ac1_status' },
+                { l: 'Ar Condicionado 2', s: 'telecom_ac2_status' },
+            ];
+
+            telecomItems.forEach(item => {
+                doc.setFontSize(10);
+                doc.setTextColor(0);
+                doc.text(item.l, 18, yPos);
+
+                const status = document.getElementById(item.s).value;
+                if (status !== 'Normal' && status !== 'Sem status') doc.setTextColor(220, 38, 38);
+                doc.text(status, 100, yPos);
+                doc.setTextColor(0);
+                yPos += 6;
+            });
+
+            yPos += 2;
+            const telObs = document.getElementById('telecom_obs').value;
+            if (telObs) {
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text('Observações:', 18, yPos);
+                doc.setTextColor(50);
+                var splitObs = doc.splitTextToSize(telObs, 140);
+                doc.text(splitObs, 40, yPos);
+                yPos += (splitObs.length * 5) + 5;
+            }
+
+            // GERADOR
+            yPos += 5;
+            if (yPos > 240) { doc.addPage(); yPos = 20; }
+            yPos = addSectionHeader('GRUPO GERADOR', yPos);
+
+            addField('GDD:', document.getElementById('generator_gdd').value, 18, yPos, 182, true); yPos += 6;
+            addField('Combustível:', document.getElementById('generator_fuel_level').value, 18, yPos); yPos += 6;
+            addField('Percentual:', document.getElementById('generator_fuel_percent').value, 18, yPos); yPos += 6;
+            addField('Próxima Revisão:', document.getElementById('generator_next_review').value, 18, yPos); yPos += 8;
+
+            const genObs = document.getElementById('generator_obs').value;
+            if (genObs) {
+                doc.setFontSize(9);
+                doc.setTextColor(100);
+                doc.text('Observações:', 18, yPos);
+                doc.setTextColor(50);
+                var splitObs = doc.splitTextToSize(genObs, 140);
+                doc.text(splitObs, 40, yPos);
+                yPos += (splitObs.length * 5) + 5;
+            }
+
+            // Footer
+            const pageCount = doc.internal.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+                doc.setFontSize(8);
+                doc.setTextColor(150);
+                doc.text('Gerado pelo Sistema de Gestão Integrada - Belém Digital', 105, 290, { align: 'center' });
+            }
+
+            doc.save(`Status_Salas_${date.replace(/\//g, '-')}.pdf`);
+        }
+    </script>
+</body>
+
+</html>

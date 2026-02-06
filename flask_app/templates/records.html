@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Painel de Controle de Atendimento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+    <aside
+        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-20">
+        <div class="flex flex-col p-4">
+            <div class="flex items-center justify-center gap-3 mb-8 px-2">
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-10 w-auto">
+            </div>
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 group transition-colors mb-2 font-bold"
+                    href="/">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="text-sm">Voltar ao Menu</span>
+                </a>
+                <div class="h-px bg-slate-200 dark:bg-slate-700 my-1 mx-2"></div>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dashboard">
+                    <span class="material-symbols-outlined fill-1">dashboard</span>
+                    <span class="text-sm font-medium">Painel</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-blue-400 group"
+                    href="/records">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <span class="text-sm font-medium">Registros Diários</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/team">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="text-sm font-medium">Equipe</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/reports">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <span class="text-sm font-medium">Relatórios</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dti/rooms">
+                    <span class="material-symbols-outlined">router</span>
+                    <span class="text-sm font-medium">Status Salas</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+    <main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-8 shrink-0">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Sistema de Controle de
+                Atendimento</h2>
+            <div class="flex items-center gap-6">
+                <div class="relative w-64">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-slate-400 text-[20px]">search</span>
+                    </div>
+                    <input
+                        class="block w-full pl-10 pr-3 py-2 border-none rounded-lg bg-white/5 text-white text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary sm:text-sm"
+                        placeholder="Buscar registros..." type="text" />
+                </div>
+                <button
+                    class="relative p-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition-colors">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span
+                        class="absolute top-2 right-2 size-2 bg-red-500 rounded-full border-2 border-white dark:border-slate-800"></span>
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-6xl mx-auto flex flex-col gap-6">
+                <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 overflow-hidden">
+                    <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                        <div>
+                            <h3 class="text-lg font-bold text-slate-900 dark:text-white">Novo Registro de Atendimento
+                            </h3>
+                            <p class="text-sm text-slate-500ダークtext-slate-400">Gerencie tarefas diárias e crie novos
+                                registros.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button
+                                class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-red-600 dark:text-red-400 rounded-lg text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Selecione uma linha para habilitar">
+                                <span class="material-symbols-outlined text-[18px]">delete</span>
+                                Excluir
+                            </button>
+                            <button
+                                class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                title="Selecione uma linha para habilitar">
+                                <span class="material-symbols-outlined text-[18px]">edit</span>
+                                Editar
+                            </button>
+                            <button
+                                class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-200 dark:shadow-none">
+                                <span class="material-symbols-outlined text-[18px]">add</span>
+                                Adicionar
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="flex flex-col gap-1.5 ">
+                                <div class="flex justify-between items-center">
+                                    <label
+                                        class="text-sm font-medium text-slate-700 dark:text-slate-300">Atendentes</label>
+                                    <button
+                                        class="text-xs text-primary hover:text-blue-600 font-medium flex items-center gap-1"
+                                        id="btn-add-attendant">
+                                        <span class="material-symbols-outlined text-[14px]">add_circle</span> Novo
+                                    </button>
+                                </div>
+                                <div class="relative">
+                                    <div class="min-h-[44px] w-full rounded-lg border border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus-within:border-primary focus-within:ring-1 focus-within:ring-primary px-2 py-1 flex flex-wrap gap-2"
+                                        id="attendant-container">
+                                        <!-- Tags will appear here -->
+                                        <input
+                                            class="flex-1 bg-transparent border-none outline-none text-sm min-w-[120px] h-8 placeholder:text-slate-400 focus:ring-0"
+                                            id="input-attendant-search" list="attendants-list"
+                                            placeholder="Adicionar atendente..." autocomplete="off">
+                                        <datalist id="attendants-list">
+                                            <!-- Dynamic Options -->
+                                        </datalist>
+                                    </div>
+                                    <p class="text-[10px] text-slate-500 mt-1">Pressione Enter para adicionar</p>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <div class="flex justify-between items-center">
+                                    <label
+                                        class="text-sm font-medium text-slate-700 dark:text-slate-300">Secretaria</label>
+                                    <div class="flex gap-2">
+                                        <button
+                                            class="text-xs text-red-500 hover:text-red-700 font-medium flex items-center gap-1"
+                                            id="btn-del-secretary" title="Excluir selecionada">
+                                            <span class="material-symbols-outlined text-[14px]">delete</span>
+                                        </button>
+                                        <button
+                                            class="text-xs text-primary hover:text-blue-600 font-medium flex items-center gap-1"
+                                            id="btn-add-secretary">
+                                            <span class="material-symbols-outlined text-[14px]">add_circle</span> Nova
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="relative">
+                                    <select
+                                        class="w-full rounded-lg border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary h-11 px-3 appearance-none">
+                                        <option disabled="" selected="" value="">Selecione a secretaria...</option>
+                                        <!-- Dynamic Options -->
+                                    </select>
+                                    <div
+                                        class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-slate-500">
+                                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Dia do
+                                    Atendimento</label>
+                                <div class="relative">
+                                    <input
+                                        class="w-full rounded-lg border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary h-11 px-3"
+                                        type="date" />
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Dia da
+                                    Finalização</label>
+                                <div class="relative">
+                                    <input
+                                        class="w-full rounded-lg border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary h-11 px-3"
+                                        type="date" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 flex flex-col gap-1.5 md:col-span-2">
+                            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Tarefa do Atendimento
+                                a ser Feita</label>
+                            <textarea id="input-task" rows="2"
+                                class="w-full rounded-lg border-slate-300 border-white/10 bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm focus:border-primary focus:ring-primary px-3 py-2 resize-none"
+                                placeholder="Descreva a tarefa a ser realizada..."></textarea>
+                        </div>
+                    </div>
+                </section>
+                <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 flex flex-col">
+                    <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-900 dark:text-white">Atividades Recentes</h3>
+                        <div class="flex items-center gap-2">
+                            <button
+                                class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded dark:text-slate-400 dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">filter_list</span>
+                            </button>
+                            <button
+                                class="p-1.5 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded dark:text-slate-400 dark:hover:bg-slate-700 transition-colors">
+                                <span class="material-symbols-outlined text-[20px]">download</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr
+                                    class="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs uppercase font-semibold tracking-wider border-b border-white/10">
+                                    <th class="px-6 py-3 w-12">
+                                        <input class="rounded border-slate-300 text-primary focus:ring-primary"
+                                            type="checkbox" />
+                                    </th>
+                                    <th class="px-6 py-3">Atendente</th>
+                                    <th class="px-6 py-3">Secretaria</th>
+                                    <th class="px-6 py-3">Dia do Atendimento</th>
+                                    <th class="px-6 py-3">Tarefa</th>
+                                    <th class="px-6 py-3">Situação</th>
+                                    <th class="px-6 py-3 text-right">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200 dark:divide-slate-700 text-sm">
+                                <!-- JS rendered -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="px-6 py-4 border-t border-white/10 flex items-center justify-between">
+                        <p class="text-sm text-slate-500 dark:text-slate-400">Mostrando <span
+                                class="font-medium">1</span> a <span class="font-medium">10</span> resultados</p>
+                        <div class="flex gap-2">
+                            <button
+                                class="px-3 py-1 border border-slate-200 border-white/10 rounded text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Anterior</button>
+                            <button
+                                class="px-3 py-1 border border-slate-200 border-white/10 rounded text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">Próximo</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+    <script>
+        // Data Management
+        let records = [];
+        let attendantsList = [];
+        let secretariesList = [];
+
+        // DOM Elements
+        const tableBody = document.querySelector('tbody');
+        const btnDelete = document.querySelector('button[title="Selecione uma linha para habilitar"]:nth-of-type(1)');
+        const btnEdit = document.querySelector('button[title="Selecione uma linha para habilitar"]:nth-of-type(2)');
+        const btnAdd = document.querySelector('.bg-primary.text-white');
+
+        // Custom Attendant Multi-select Elements
+        const attendantContainer = document.getElementById('attendant-container');
+        const inputAttendantSearch = document.getElementById('input-attendant-search');
+        const datalistAttendants = document.getElementById('attendants-list');
+        const btnAddAttendant = document.getElementById('btn-add-attendant');
+
+        // Secretary Elements
+        const inputSecretary = document.querySelector('select');
+        const btnAddSecretary = document.getElementById('btn-add-secretary');
+        const btnDelSecretary = document.getElementById('btn-del-secretary');
+
+        const inputDates = document.querySelectorAll('input[type="date"]');
+        const inputStartDate = inputDates[0];
+        const inputEndDate = inputDates[1];
+        const inputTask = document.getElementById('input-task');
+
+        // State
+        let selectedId = null;
+        let selectedAttendants = [];
+
+        // --- Functions --- //
+
+        async function initData() {
+            // Fetch all initial data using Promise.all for speed
+            const [recRes, attRes, secRes] = await Promise.all([
+                fetch('/api/records'),
+                fetch('/api/attendants'),
+                fetch('/api/secretaries')
+            ]);
+            records = await recRes.json();
+            attendantsList = await attRes.json();
+            secretariesList = await secRes.json();
+
+            initDataLists();
+            renderTable();
+            checkUrlParams();
+        }
+
+        function initDataLists() {
+            // Populate Attendants Datalist
+            datalistAttendants.innerHTML = '';
+            attendantsList.forEach(name => {
+                const opt = document.createElement('option');
+                opt.value = name;
+                datalistAttendants.appendChild(opt);
+            });
+
+            // Populate Secretaries Select
+            const currentVal = inputSecretary.value;
+            inputSecretary.innerHTML = '<option disabled selected value="">Selecione a secretaria...</option>';
+            secretariesList.forEach(sec => {
+                const opt = document.createElement('option');
+                opt.value = sec;
+                opt.textContent = sec;
+                inputSecretary.appendChild(opt);
+            });
+            if (currentVal && secretariesList.includes(currentVal)) inputSecretary.value = currentVal;
+        }
+
+        // --- Attendant Tag Logic --- //
+        function renderAttendantTags() {
+            const tags = attendantContainer.querySelectorAll('.tag-chip');
+            tags.forEach(t => t.remove());
+
+            selectedAttendants.forEach(name => {
+                const tag = document.createElement('div');
+                tag.className = 'tag-chip flex items-center gap-1 bg-blue-100 dark:bg-blue-900/40 text-blue-800 dark:text-blue-200 text-xs font-medium px-2 py-1 rounded-md';
+                tag.innerHTML = `
+                    <span>${name}</span>
+                    <button type="button" class="hover:text-red-500 rounded-full p-0.5" onclick="removeAttendant('${name}')">
+                        <span class="material-symbols-outlined text-[14px]">close</span>
+                    </button>
+                `;
+                attendantContainer.insertBefore(tag, inputAttendantSearch);
+            });
+        }
+
+        function addAttendantToSelection(name) {
+            if (name && !selectedAttendants.includes(name)) {
+                selectedAttendants.push(name);
+                renderAttendantTags();
+                inputAttendantSearch.value = '';
+                inputAttendantSearch.focus();
+            }
+        }
+
+        window.removeAttendant = function (name) {
+            selectedAttendants = selectedAttendants.filter(n => n !== name);
+            renderAttendantTags();
+        }
+
+        inputAttendantSearch.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                const val = inputAttendantSearch.value.trim();
+                if (val) addAttendantToSelection(val);
+            }
+        });
+
+        inputAttendantSearch.addEventListener('change', (e) => {
+            const val = inputAttendantSearch.value.trim();
+            if (val && attendantsList.includes(val)) {
+                addAttendantToSelection(val);
+            }
+        });
+
+        btnAddAttendant.addEventListener('click', async () => {
+            const newName = prompt("Digite o nome do novo atendente:");
+            if (newName && newName.trim()) {
+                const name = newName.trim();
+                if (!attendantsList.includes(name)) {
+                    // Add to Backend
+                    await fetch('/api/attendants', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: name })
+                    });
+
+                    attendantsList.push(name);
+                    initDataLists();
+                    alert(`Atendente "${name}" cadastrado com sucesso!`);
+                } else {
+                    alert("Este atendente já está cadastrado.");
+                }
+                addAttendantToSelection(name);
+            }
+        });
+
+        // --- Secretary Logic --- //
+        btnAddSecretary.addEventListener('click', async () => {
+            const newSec = prompt("Digite o nome da nova secretaria:");
+            if (newSec && newSec.trim()) {
+                const sec = newSec.trim();
+                if (!secretariesList.includes(sec)) {
+                    // Add to Backend
+                    await fetch('/api/secretaries', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ name: sec })
+                    });
+
+                    secretariesList.push(sec);
+                    initDataLists();
+                    inputSecretary.value = sec;
+                } else {
+                    alert("Esta secretaria já existe.");
+                }
+            }
+        });
+
+        btnDelSecretary.addEventListener('click', async () => {
+            const val = inputSecretary.value;
+            if (!val) {
+                alert("Selecione uma secretaria para excluir.");
+                return;
+            }
+
+            if (confirm(`Tem certeza que deseja excluir a secretaria "${val}" permanentemente?`)) {
+                await fetch(`/api/secretaries/${encodeURIComponent(val)}`, { method: 'DELETE' });
+
+                secretariesList = secretariesList.filter(s => s !== val);
+                initDataLists();
+                inputSecretary.value = "";
+                alert("Secretaria excluída com sucesso.");
+            }
+        });
+
+
+        // --- Table & Form Logic --- //
+        function renderTable() {
+            tableBody.innerHTML = '';
+            records.forEach(record => {
+                const tr = document.createElement('tr');
+                tr.className = `hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors group cursor-pointer ${selectedId === record.id ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`;
+
+                let displayAttendant = Array.isArray(record.attendant) ? record.attendant.join(', ') : record.attendant;
+
+                tr.innerHTML = `
+                    <td class="px-6 py-4">
+                        <input type="checkbox" class="rounded border-slate-300 text-primary focus:ring-primary" 
+                            ${selectedId === record.id ? 'checked' : ''} onclick="event.stopPropagation(); toggleSelection(${record.id})">
+                    </td>
+                    <td class="px-6 py-4 font-medium text-slate-900 dark:text-white">${displayAttendant}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">${record.secretary}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400">${record.date}</td>
+                    <td class="px-6 py-4 text-slate-500 dark:text-slate-400 truncate max-w-[150px]" title="${record.task || ''}">${record.task || '-'}</td>
+                    <td class="px-6 py-4">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
+                            ${record.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        <button class="text-slate-400 hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">more_vert</span>
+                        </button>
+                    </td>
+                `;
+                tr.addEventListener('click', () => toggleSelection(record.id));
+                tableBody.appendChild(tr);
+            });
+            updateButtons();
+        }
+
+        function toggleSelection(id) {
+            selectedId = (selectedId === id) ? null : id;
+            renderTable();
+            if (selectedId) loadForm(id);
+            else clearForm();
+        }
+
+        function loadForm(id) {
+            const record = records.find(r => r.id === id);
+            if (record) {
+                if (Array.isArray(record.attendant)) {
+                    selectedAttendants = [...record.attendant];
+                } else {
+                    selectedAttendants = record.attendant ? [record.attendant] : [];
+                }
+                renderAttendantTags();
+
+                inputSecretary.value = record.secretary;
+                inputStartDate.value = record.date;
+                inputTask.value = record.task || '';
+                if (inputEndDate) inputEndDate.value = record.endDate || '';
+
+                if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+                    document.querySelector('section').scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        }
+
+        function clearForm() {
+            selectedAttendants = [];
+            renderAttendantTags();
+            inputAttendantSearch.value = '';
+            inputSecretary.value = '';
+            inputStartDate.value = '';
+            inputTask.value = '';
+            if (inputEndDate) inputEndDate.value = '';
+        }
+
+        async function addRecord() {
+            if (selectedAttendants.length === 0 || !inputSecretary.value || !inputStartDate.value) {
+                alert('Preencha os campos obrigatórios (Atendentes, Secretaria, Dia)!');
+                return;
+            }
+
+            // const recordId = selectedId ? selectedId : Date.now(); // Date.now() overflows INTEGER
+            const recordData = {
+                attendant: selectedAttendants,
+                secretary: inputSecretary.value,
+                date: inputStartDate.value,
+                endDate: inputEndDate ? inputEndDate.value : '',
+                task: inputTask.value,
+                status: selectedId ? undefined : 'Novo'
+            };
+
+            if (selectedId) {
+                recordData.id = selectedId;
+            }
+
+            // Save via API
+            await fetch('/api/records', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(recordData)
+            });
+
+            // Reload data to reflect persistence
+            const res = await fetch('/api/records');
+            records = await res.json();
+
+            selectedId = null;
+            clearForm();
+            renderTable();
+        }
+
+        async function deleteRecord() {
+            if (selectedId && confirm('Tem certeza que deseja excluir?')) {
+                await fetch(`/api/records/${selectedId}`, { method: 'DELETE' });
+
+                records = records.filter(r => r.id !== selectedId);
+                selectedId = null;
+                clearForm();
+                renderTable();
+            }
+        }
+
+        function updateButtons() {
+            const hasSelection = selectedId !== null;
+            if (btnEdit) {
+                btnEdit.disabled = !hasSelection;
+                btnEdit.classList.toggle('opacity-50', !hasSelection);
+            }
+            if (btnDelete) {
+                btnDelete.disabled = !hasSelection;
+                btnDelete.classList.toggle('opacity-50', !hasSelection);
+            }
+
+            if (btnAdd) {
+                btnAdd.innerHTML = selectedId ?
+                    `<span class="material-symbols-outlined text-[18px]">save</span> Salvar` :
+                    `<span class="material-symbols-outlined text-[18px]">add</span> Inclusão`;
+            }
+        }
+
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            const paramId = urlParams.get('id');
+
+            if (action === 'edit' && paramId) {
+                const id = parseInt(paramId);
+                if (!isNaN(id)) {
+                    toggleSelection(id);
+                    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 300);
+                }
+            } else if (action === 'new') {
+                inputAttendantSearch.focus();
+            }
+        }
+
+        // Attach listeners
+        if (btnDelete) btnDelete.onclick = deleteRecord;
+        if (btnAdd) btnAdd.onclick = addRecord;
+        if (btnEdit) btnEdit.onclick = () => { if (selectedId) inputAttendantSearch.focus(); };
+
+        // Init
+        initData();
+
+    </script>
+
+</body>
+
+</html>

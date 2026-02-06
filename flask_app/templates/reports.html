@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Relatórios - Belém Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex overflow-hidden">
+    <aside
+        class="w-64 glass-panel text-white border-r border-white/10 flex flex-col justify-between h-screen fixed left-0 top-0 z-20">
+        <div class="flex flex-col p-4">
+            <div class="flex items-center justify-center gap-3 mb-8 px-2">
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-10 w-auto">
+            </div>
+            <nav class="flex flex-col gap-2">
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 group transition-colors mb-2 font-bold"
+                    href="/">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="text-sm">Voltar ao Menu</span>
+                </a>
+                <div class="h-px bg-slate-200 dark:bg-slate-700 my-1 mx-2"></div>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dashboard">
+                    <span class="material-symbols-outlined fill-1">dashboard</span>
+                    <span class="text-sm font-medium">Painel</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/records">
+                    <span class="material-symbols-outlined">list_alt</span>
+                    <span class="text-sm font-medium">Registros Diários</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/team">
+                    <span class="material-symbols-outlined">group</span>
+                    <span class="text-sm font-medium">Equipe</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-blue-400 group"
+                    href="/reports">
+                    <span class="material-symbols-outlined">bar_chart</span>
+                    <span class="text-sm font-medium">Relatórios</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-700 group transition-colors"
+                    href="/dti/rooms">
+                    <span class="material-symbols-outlined">router</span>
+                    <span class="text-sm font-medium">Status Salas</span>
+                </a>
+            </nav>
+        </div>
+    </aside>
+
+    <main class="ml-64 flex-1 flex flex-col h-screen overflow-hidden">
+        <header
+            class="h-16 glass-panel text-white border-b border-white/10 flex items-center justify-between px-8 shrink-0">
+            <h2 class="text-xl font-bold text-slate-800 dark:text-white tracking-tight">Central de Relatórios</h2>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-8">
+            <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Report Card 1: Atendimentos por Dia -->
+                <div
+                    class="glass-panel text-white rounded-xl shadow-sm border border-white/10 p-6 hover:border-primary/50 transition-colors group">
+                    <div
+                        class="flex items-center justify-center size-12 rounded-lg bg-blue-500/20 text-blue-500 mb-4 group-hover:bg-blue-500 group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-3xl">calendar_month</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Atendimentos Diários</h3>
+                    <p class="text-slate-500 text-sm mb-4">Visualize a quantidade de atendimentos realizados por dia.
+                    </p>
+                    <div class="h-48 relative">
+                        <canvas id="dailyChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Report Card 2: Status das Tarefas -->
+                <div
+                    class="glass-panel text-white rounded-xl shadow-sm border border-white/10 p-6 hover:border-emerald-500/50 transition-colors group">
+                    <div
+                        class="flex items-center justify-center size-12 rounded-lg bg-emerald-500/20 text-emerald-500 mb-4 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-3xl">pie_chart</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Status das Tarefas</h3>
+                    <p class="text-slate-500 text-sm mb-4">Distribuição entre tarefas pendentes, em andamento e
+                        concluídas.</p>
+                    <div class="h-48 relative">
+                        <canvas id="statusChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Report Card 3: Desempenho da Equipe -->
+                <div
+                    class="glass-panel text-white rounded-xl shadow-sm border border-white/10 p-6 hover:border-purple-500/50 transition-colors group">
+                    <div
+                        class="flex items-center justify-center size-12 rounded-lg bg-purple-500/20 text-purple-500 mb-4 group-hover:bg-purple-500 group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-3xl">groups</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Produtividade da Equipe</h3>
+                    <p class="text-slate-500 text-sm mb-4">Rankings e métricas de desempenho por atendente.</p>
+                    <div class="h-48 relative">
+                        <canvas id="teamChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Report Card 4: Exportar Dados -->
+                <div class="glass-panel text-white rounded-xl shadow-sm border border-white/10 p-6 hover:border-red-500/50 transition-colors cursor-pointer group"
+                    onclick="exportPDF()">
+                    <div
+                        class="flex items-center justify-center size-12 rounded-lg bg-red-500/20 text-red-500 mb-4 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                        <span class="material-symbols-outlined text-3xl">picture_as_pdf</span>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Exportar PDF</h3>
+                    <p class="text-slate-500 text-sm mb-4">Baixe o relatório completo em formato PDF.</p>
+                    <div
+                        class="h-32 bg-slate-100 dark:bg-slate-800 rounded-lg flex items-center justify-center text-slate-400 text-xs font-mono">
+                        <span class="material-symbols-outlined text-4xl">download</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/api/reports/stats')
+                .then(response => response.json())
+                .then(data => {
+                    renderDailyChart(data.daily_counts);
+                    renderStatusChart(data.status_counts);
+                    renderTeamChart(data.team_performance);
+                })
+                .catch(error => console.error('Error fetching stats:', error));
+        });
+
+        function renderDailyChart(data) {
+            const ctx = document.getElementById('dailyChart').getContext('2d');
+
+            // Sort dates
+            const sortedDates = Object.keys(data).sort((a, b) => {
+                // Try parsing dates DD/MM/YYYY
+                const dateA = a.split('/').reverse().join('-');
+                const dateB = b.split('/').reverse().join('-');
+                return new Date(dateA) - new Date(dateB);
+            });
+
+            const values = sortedDates.map(date => data[date]);
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: sortedDates,
+                    datasets: [{
+                        label: 'Atendimentos',
+                        data: values,
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function renderStatusChart(data) {
+            const ctx = document.getElementById('statusChart').getContext('2d');
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+
+            // Define colors based on status if possible, else defaults
+            const colors = labels.map(label => {
+                if (label === 'Novo') return '#3b82f6';
+                if (label === 'Em Andamento') return '#f59e0b';
+                if (label === 'Concluído') return '#10b981';
+                return '#6366f1';
+            });
+
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: values,
+                        backgroundColor: colors,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'right', labels: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        function renderTeamChart(data) {
+            const ctx = document.getElementById('teamChart').getContext('2d');
+            const sortedEntries = Object.entries(data).sort((a, b) => b[1] - a[1]);
+            const labels = sortedEntries.map(e => e[0]);
+            const values = sortedEntries.map(e => e[1]);
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tarefas Concluídas',
+                        data: values,
+                        backgroundColor: '#8b5cf6',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { beginAtZero: true, grid: { color: 'rgba(255, 255, 255, 0.1)' }, ticks: { color: '#94a3b8' } },
+                        y: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    }
+                }
+            });
+        }
+
+        async function exportPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Add Title
+            doc.setFontSize(20);
+            doc.text('Relatório de Atividades - Belém Digital', 14, 22);
+            doc.setFontSize(10);
+            doc.text(`Gerado em: ${new Date().toLocaleString()}`, 14, 30);
+
+            // Add Charts
+            try {
+                const dailyChart = document.getElementById('dailyChart');
+                const statusChart = document.getElementById('statusChart');
+                const teamChart = document.getElementById('teamChart');
+
+                if (dailyChart) {
+                    doc.text('Atendimentos Diários', 14, 40);
+                    doc.addImage(dailyChart.toDataURL('image/png'), 'PNG', 14, 45, 180, 60);
+                }
+
+                if (statusChart) {
+                    doc.text('Status das Tarefas', 14, 115);
+                    doc.addImage(statusChart.toDataURL('image/png'), 'PNG', 14, 120, 80, 80);
+                }
+
+                if (teamChart) {
+                    doc.text('Produtividade da Equipe', 100, 115);
+                    doc.addImage(teamChart.toDataURL('image/png'), 'PNG', 100, 120, 95, 80);
+                }
+            } catch (e) {
+                console.error("Error adding charts to PDF", e);
+            }
+
+            // Add Table
+            doc.addPage();
+            doc.text('Detalhamento dos Registros', 14, 20);
+
+            try {
+                const response = await fetch('/api/records');
+                const records = await response.json();
+
+                if (records && records.length > 0) {
+                    const tableColumn = ["ID", "Data", "Tarefa", "Status", "Atendente", "Secretaria"];
+                    const tableRows = records.map(record => {
+                        let attendantStr = record.attendant;
+                        if (Array.isArray(attendantStr)) {
+                            attendantStr = attendantStr.join(', ');
+                        } else if (typeof attendantStr === 'string' && (attendantStr.startsWith('[') || attendantStr.startsWith('{'))) {
+                            try {
+                                let parsed = JSON.parse(attendantStr);
+                                if (Array.isArray(parsed)) attendantStr = parsed.join(', ');
+                            } catch (e) { }
+                        }
+
+                        return [
+                            record.id,
+                            record.date,
+                            record.task,
+                            record.status,
+                            attendantStr,
+                            record.secretary
+                        ];
+                    });
+
+                    doc.autoTable({
+                        head: [tableColumn],
+                        body: tableRows,
+                        startY: 25,
+                        theme: 'grid',
+                        styles: { fontSize: 8 },
+                        headStyles: { fillColor: [22, 163, 74] }
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching records for PDF:', error);
+            }
+
+            doc.save('relatorio_belem_digital.pdf');
+        }
+    </script>
+</body>
+
+</html>

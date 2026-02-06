@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Portal de Gestão de Atendimento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="flask_app/static/js/tailwind-config.js"></script>
+    <link rel="stylesheet" href="flask_app/static/css/style.css">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-800 glass-card text-white px-6 py-3 shadow-sm">
+            <div class="flex items-center gap-4">
+                <a href="index.html"
+                    class="flex items-center gap-2 text-slate-500 hover:text-primary transition-colors mr-2">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                </a>
+                <div class="flex size-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <span class="material-symbols-outlined text-3xl">dashboard</span>
+                </div>
+                <h2
+                    class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight hidden sm:block">
+                    Portal de Gestão de Atendimento</h2>
+            </div>
+            <div class="flex flex-1 justify-end gap-6 items-center">
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    <a class="text-primary hover:text-primary transition-colors" href="#">Painel</a>
+                    <a class="hover:text-primary transition-colors" href="#">Relatórios</a>
+                    <a class="hover:text-primary transition-colors" href="#">Configurações</a>
+                </nav>
+                <div class="h-6 w-px bg-slate-200 dark:bg-slate-700 hidden md:block"></div>
+                <button
+                    class="flex items-center gap-3 cursor-pointer overflow-hidden rounded-full p-1 pl-3 pr-1 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-transparent hover:border-slate-300 dark:hover:border-slate-600">
+                    <span class="text-sm font-bold text-slate-700 dark:text-slate-200 truncate max-w-[100px]">Usuário
+                        Admin</span>
+                    <div class="bg-center bg-no-repeat bg-cover rounded-full size-8"
+                        style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBd3YFgYd8iSwLVJSA6fpmwmGgHexoqV6T6eE68H4HeDes8wJhTdYtUSiRBYjjSX4JObe_wyaxV9CS5tlFv1X4CZXYFa_YpHk965crzgZCoaPyfYZAnicvjXlYpO9Y_q1MYJT0JiC2HhgPtuCphDrOiHdnYB2EEa52oAzOivhB7AWNgQRXp7i6BA7-hqhftEPqVwSXcrh9fOyB_bvm0yfrcJ04EiKf1taDvcwuGVJSgXslN5BJDl18lCyqu8Vz62Frt9JNKogVOVLFN");'>
+                    </div>
+                </button>
+            </div>
+        </header>
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">
+                            Visão Geral</p>
+                        <h1
+                            class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                            Controle Diário</h1>
+                    </div>
+                    <div class="flex items-center gap-2 text-primary bg-primary/10 px-4 py-2 rounded-lg">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                        <p class="text-base font-semibold">Segunda-feira, 24 de Out de 2023</p>
+                    </div>
+                </div>
+                <div
+                    class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between glass-card text-white p-4 rounded-xl border border-slate-800 shadow-sm">
+                    <div class="w-full lg:w-96">
+                        <label class="relative flex w-full items-center">
+                            <span class="absolute left-4 text-slate-400 material-symbols-outlined">search</span>
+                            <input
+                                class="w-full rounded-lg border-none bg-slate-100 dark:bg-slate-800 py-3 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium transition-all hover:bg-slate-200 dark:hover:bg-slate-700"
+                                placeholder="Filtrar por Atendente ou ID..." value="" />
+                        </label>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button
+                            class="group flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-500/30">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            <span class="text-sm font-bold">Nova Entrada</span>
+                        </button>
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                            <span class="text-sm font-semibold">Modificar</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-900 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                            <span class="text-sm font-semibold">Remover</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20">Ativo</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1024</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Log de Manutenção A
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuC050oaPsLcyauXRhWxutZjqUnl6KSnU3sOyd2fHgYT2lzuIQaKIYnprsXiytwz3F8m3dziPtZXJBEk9ZLJQiolrhughd_oe36fDcdtjjebANxUGpFfLLNe1mLIMgOfJjRbkdnzTRq1h3c2EjOFFtgAffe6IacioseUuSTA31m4IDfHSpX9vAbz4mFiq_anfJIx87RzWtLbV-TyNL9MQdFTLehIGJ8lrD8TFkltCBb1CGDB-blTI7WCvph0Q60zlzK_Qw2Z3VEzXpCB");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">Sarah Jenkins</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Recepção 01</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">09:00</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">11:30</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-blue-50 dark:bg-blue-900/30 px-2 py-1 text-xs font-bold text-blue-700 dark:text-blue-400 ring-1 ring-inset ring-blue-600/20">Pendente</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1025</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Inspeção de Local</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAf_tZ7g2lMQj52sRKPXdlypKPuPbuIWlDWsaI4otKwFhHtwtMdMmaFDePz7fq2sIRy3iaA3IuWNcVieXleQKp3IGWSqw3ibe1jPO3LfsoXjurXt-4fzBrmOy1BcNK-QP6sY7UUtLDQJL5aekPe80HrL8CH2CsCDL24MhyG4ywAgeIwI1jFxw1bwG6mTDOuH9Xrrx5vP3CixddAcYpR-n7dIIu9_jIYsd7tcSzV72nAyIs0WfD_GDxfIcO1eej2n3gAa-U4odd8FRyr");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">Michael Chen</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Centro de Ops 02
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">13:15</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-400 dark:text-slate-500">--:--
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-700 px-2 py-1 text-xs font-bold text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/20">Encerrado</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1022</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Reunião Matinal</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDux2Lcx7d6_Ys7vSe_xDOoxq2xKgIqDHPfkaK47jKKSaR4AsI-NxVcFK4U67avR-FahffnkXYdaItsP1LUMTzrUZE8dZZ1ty8mnBC8xD0rqsJ6N9Kciq69y11sdk-NehCbzo4Z6Q1g0DmpJVjCtvcr7Z5btgn7Ks-FHqOgBQ9Q2KPsdtZMsnrbrU65YHHWxtjEEaZ-DggL_yg-TWcL9eSWqGx9EIDMkuURSzOQG8Px1iX_O5lBe6BScB3zGeyD8BsBX9zGzQ-EY42F");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">Emily Davis</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Ala de RH</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">08:00</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">08:45</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-emerald-50 dark:bg-emerald-900/30 px-2 py-1 text-xs font-bold text-emerald-700 dark:text-emerald-400 ring-1 ring-inset ring-emerald-600/20">Ativo</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1026</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Checagem de
+                                    Equipamento</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDq7w0DmbPvK7NWYWgtBtuReNXpEaVihwtdh52crukoVUM0rVh6PqTIYE_-c4a43_X5gcu_pb9r4uRxwrXn5P_dXYtVNT29FxPVuuMCt87yNROluB72CnNH-WUdZ-kHejmo40iVv5AJW5dFS9jLPvO6PcIQpdbCb3-LZRe8AdKHbiOR3J7JpixVhUb18O-bXmDqJG2NqZVL_RlFJPGGuf6EKG_-hxL7U6kNk40SBNn1wJkjso7hFyi3Q9dE4PeyghX9YRlQsc_0dGcr");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">James Wilson</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Depto de
+                                        Instalações</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">14:30</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-400 dark:text-slate-500">--:--
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-red-50 dark:bg-red-900/30 px-2 py-1 text-xs font-bold text-red-700 dark:text-red-400 ring-1 ring-inset ring-red-600/20">Urgente</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1027</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Alerta de Servidor
+                                </h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBELhDqCEp3gGMg9cCL5T_wCzPaltwB0sBcLOdTp6E0WisDeC2jbQe6IONPsMziRBA4ezi8E2m584CZsrbATjQ2JYLaF-okkemRLwfbN92yO21Pf2faCJxaZ7Xt7vimMgl-Sv8VUXnkiB16eLcKPnYG6UjLVKXXM0fmysuSYH-ZU25XgQcVlBm0meoKbbjS4qRVSlPMx7p0GtaEw12XD-Dup3JfEaZtn5Zp_gymRguDIGGV4f5IuSUhO0Kae19HxZmZ77NF7c97nUMW");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">Lisa Wong</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Suporte de TI
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">15:00</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-400 dark:text-slate-500">--:--
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input
+                                class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer"
+                                type="checkbox" />
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span
+                                        class="inline-flex items-center rounded-full bg-slate-100 dark:bg-slate-700 px-2 py-1 text-xs font-bold text-slate-600 dark:text-slate-300 ring-1 ring-inset ring-slate-500/20">Encerrado</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-1021</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Briefing Diário</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="bg-center bg-no-repeat bg-cover rounded-full size-10 shadow-inner"
+                                    style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBfnLCVoDLR5_oHtUhT0Z91Ut29wcRn-eX1GhXJJNxt4BHz6rWnHliHOf2ha9mHrtKpcqE_Ai2jZZBsPvgq_RG0d4bYIqbURGdNWLBv5jq4F1D3EDTheYM0LY9-Ev75Ze6NKkH45FR9C6zPfWLaEjRwHdeyViMqXoIUu7QJpK_MN5JyaCzlIt3aOHjsHcDe-lc9CXe4GYopmk2tb-vZEnNGLXh9fQXVHwJdBCWdRC8-Ykxz-JD_--Ct8pl_Z-j9scLAnwAapNs-Ib8N");'>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">Robert Fox</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div
+                                    class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p
+                                        class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+                                        Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">Ala Executiva
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">07:45</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Data de Término</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">08:15</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-center">
+                    <button
+                        class="flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+                        <span>Carregar Mais Entradas</span>
+                        <span class="material-symbols-outlined text-[20px]">expand_more</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        // Shared Data Management
+        const STORAGE_KEY = 'attendance_records';
+        let records = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
+            { id: 1, attendant: ['Sarah Connor'], secretary: 'TI', date: '2023-10-24', endDate: '2023-10-24', status: 'Concluído' },
+            { id: 2, attendant: ['Kyle Reese', 'Rick Deckard'], secretary: 'OPS', date: '2023-10-26', endDate: '', status: 'Pendente' },
+            { id: 3, attendant: ['Ellen Ripley'], secretary: 'LOG', date: '2023-10-27', endDate: '', status: 'Em Andamento' }
+        ];
+
+        // DOM Elements - Using precise selection based on hierarchy
+        const toolbar = document.querySelector('.mb-6 .flex.flex-wrap.items-center.gap-3');
+        // We know the order is Add, separator, Edit, Remove based on HTML structure
+        const btnAdd = toolbar ? toolbar.querySelector('button:nth-of-type(1)') : null;
+        const btnEdit = toolbar ? toolbar.querySelector('button:nth-of-type(2)') : null;
+        const btnDelete = toolbar ? toolbar.querySelector('button:nth-of-type(3)') : null;
+
+        const gridContainer = document.querySelector('.grid.grid-cols-1');
+
+        // State
+        let selectedId = null; // Single selection for simplicity and consistency with Edit
+
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(records));
+        }
+
+        function renderCards() {
+            if (!gridContainer) return;
+            gridContainer.innerHTML = '';
+
+            records.forEach(record => {
+                const isSelected = selectedId === record.id;
+                // Determine card status color class
+                let statusColor = 'bg-blue-50 text-blue-700 ring-blue-600/20';
+                if (record.status === 'Concluído') statusColor = 'bg-emerald-50 text-emerald-700 ring-emerald-600/20';
+                if (record.status === 'Urgente') statusColor = 'bg-red-50 text-red-700 ring-red-600/20';
+
+                // Handle display of multiple attendants
+                let displayAttendant = Array.isArray(record.attendant) ? record.attendant.join(', ') : record.attendant;
+
+                const cardHTML = `
+                    <div class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ${isSelected ? 'ring-primary shadow-md' : 'ring-slate-200 dark:ring-slate-800'} transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50 cursor-pointer" onclick="selectCard(${record.id})">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer" 
+                            type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); selectCard(${record.id})">
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-bold ring-1 ring-inset ${statusColor} dark:opacity-80">${record.status}</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-${1000 + record.id}</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1">Registro de Atendimento</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center size-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400">
+                                    <span class="material-symbols-outlined">person</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">${displayAttendant}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">${record.secretary}</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">${record.date || '--'}</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Fim</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-400 dark:text-slate-500">${record.endDate || '--'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
+            updateButtons();
+        }
+
+        function selectCard(id) {
+            selectedId = (selectedId === id) ? null : id;
+            renderCards();
+        }
+
+        function handleAdd() {
+            window.location.href = 'code2.html?action=new';
+        }
+
+        function handleEdit() {
+            if (selectedId) {
+                window.location.href = `code2.html?action=edit&id=${selectedId}`;
+            }
+        }
+
+        function handleDelete() {
+            if (selectedId && confirm('Tem certeza que deseja remover este registro?')) {
+                records = records.filter(r => r.id !== selectedId);
+                saveToStorage();
+                selectedId = null;
+                renderCards();
+            }
+        }
+
+        function updateButtons() {
+            if (!btnEdit || !btnDelete) return;
+
+            const hasSelection = selectedId !== null;
+
+            btnEdit.classList.toggle('opacity-50', !hasSelection);
+            btnEdit.classList.toggle('cursor-not-allowed', !hasSelection);
+            // Disable pointer events if not enabled to prevent click
+            btnEdit.style.pointerEvents = hasSelection ? 'auto' : 'none';
+
+            btnDelete.classList.toggle('opacity-50', !hasSelection);
+            btnDelete.classList.toggle('cursor-not-allowed', !hasSelection);
+            btnDelete.style.pointerEvents = hasSelection ? 'auto' : 'none';
+        }
+
+        // Initialize Listeners
+        if (btnAdd) btnAdd.onclick = handleAdd;
+        if (btnEdit) btnEdit.onclick = handleEdit;
+        if (btnDelete) btnDelete.onclick = handleDelete;
+
+        // Render init
+        renderCards();
+
+    </script>
+
+</body>
+
+</html>

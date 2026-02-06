@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Portal de Gestão de Atendimento</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="{{ url_for('static', filename='js/tailwind-config.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display transition-colors duration-200">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
+        <header
+            class="sticky top-0 z-50 flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-800 glass-panel text-white px-6 py-3 shadow-sm">
+            <div class="flex items-center gap-4">
+                <a href="/"
+                    class="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/10 border border-white/10 text-white hover:bg-white/20 transition-colors mr-2 font-bold">
+                    <span class="material-symbols-outlined">arrow_back</span>
+                    <span class="text-sm hidden md:inline">Voltar</span>
+                </a>
+                <img src="{{ url_for('static', filename='img/belem_digital_logo.png') }}" alt="Belém Digital"
+                    class="h-12 w-auto">
+            </div>
+            <div class="flex flex-1 justify-end gap-6 items-center">
+                <nav class="hidden md:flex gap-6 text-sm font-medium text-slate-600 dark:text-slate-400">
+                    <a class="text-primary hover:text-primary transition-colors" href="/dashboard">Painel</a>
+                    <a class="hover:text-primary transition-colors" href="/records">Registros Diários</a>
+                    <a class="hover:text-primary transition-colors" href="/reports">Relatórios</a>
+                    <a class="hover:text-primary transition-colors" href="/dti/rooms">Status Salas</a>
+                </nav>
+            </div>
+        </header>
+        <div class="layout-container flex h-full grow flex-col">
+            <div class="mx-auto flex w-full max-w-7xl flex-col px-4 py-8 sm:px-6 lg:px-8">
+                <div class="mb-8 flex flex-col gap-1 md:flex-row md:items-end md:justify-between">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-slate-500 dark:text-slate-400 text-sm font-semibold uppercase tracking-wider">
+                            Visão Geral</p>
+                        <h1
+                            class="text-slate-900 dark:text-white text-3xl md:text-4xl font-black leading-tight tracking-tight">
+                            Controle Diário</h1>
+                    </div>
+                </div>
+
+                <div
+                    class="mb-6 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between glass-card text-white p-4 rounded-xl border border-slate-800 shadow-sm">
+                    <div class="w-full lg:w-96">
+                        <label class="relative flex w-full items-center">
+                            <span class="absolute left-4 text-slate-400 material-symbols-outlined">search</span>
+                            <input
+                                class="w-full rounded-lg border-none bg-slate-100 dark:bg-slate-800 py-3 pl-12 pr-4 text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-2 focus:ring-primary focus:outline-none text-sm font-medium transition-all hover:bg-slate-200 dark:hover:bg-slate-700"
+                                placeholder="Filtrar por Atendente ou ID..." />
+                        </label>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button
+                            class="group flex items-center justify-center gap-2 rounded-lg bg-primary px-5 py-2.5 text-white shadow-md shadow-blue-500/20 hover:bg-blue-600 hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-500/30">
+                            <span class="material-symbols-outlined text-[20px]">add</span>
+                            <span class="text-sm font-bold">Nova Entrada</span>
+                        </button>
+                        <div class="h-8 w-px bg-slate-200 dark:bg-slate-700 hidden sm:block"></div>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">edit</span>
+                            <span class="text-sm font-semibold">Modificar</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-emerald-500/10 dark:bg-emerald-900/20 px-4 py-2.5 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-500/20 dark:hover:bg-emerald-900/40 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                            <span class="text-sm font-semibold">Finalizar</span>
+                        </button>
+                        <button
+                            class="flex items-center justify-center gap-2 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-4 py-2.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:border-red-200 dark:hover:border-red-900 transition-colors">
+                            <span class="material-symbols-outlined text-[20px]">delete</span>
+                            <span class="text-sm font-semibold">Remover</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+                    <!-- Cards Rendered Here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Context Summary Modal -->
+    <div id="context-modal" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog"
+        aria-modal="true">
+        <!-- Backdrop -->
+        <div class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm transition-opacity opacity-0" id="modal-backdrop">
+        </div>
+
+        <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
+            <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <!-- Modal Panel -->
+                <div class="relative transform overflow-hidden rounded-2xl glass-card text-left shadow-2xl transition-all sm:my-8 sm:w-full sm:max-w-lg opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                    id="modal-panel">
+                    <div class="px-6 py-6 pb-0">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex flex-col gap-1">
+                                <h3 class="text-xl font-bold text-white leading-6" id="modal-title">Detalhes do
+                                    Atendimento</h3>
+                                <p class="text-sm text-slate-400" id="modal-subtitle">#SVC-1234</p>
+                            </div>
+                            <button type="button" class="text-slate-400 hover:text-white transition-colors"
+                                onclick="closeModal()">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-4 space-y-6">
+                        <!-- Task Description -->
+                        <div class="rounded-xl bg-white/5 p-4 border border-white/10">
+                            <h4 class="text-xs font-bold text-primary uppercase tracking-wider mb-2">RESUMO DA TAREFA
+                            </h4>
+                            <p class="text-slate-200 text-sm leading-relaxed" id="modal-task-desc">
+                                Nenhuma descrição fornecida.
+                            </p>
+                        </div>
+
+                        <!-- Info Grid -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                                <p class="text-[10px] uppercase font-bold text-slate-500 mb-1">Atendente</p>
+                                <p class="text-sm font-semibold text-white" id="modal-attendant">--</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                                <p class="text-[10px] uppercase font-bold text-slate-500 mb-1">Secretaria</p>
+                                <p class="text-sm font-semibold text-white" id="modal-secretary">--</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                                <p class="text-[10px] uppercase font-bold text-slate-500 mb-1">Início</p>
+                                <p class="font-mono text-sm font-semibold text-white" id="modal-date">--</p>
+                            </div>
+                            <div class="p-3 rounded-lg bg-slate-800/50 border border-slate-700/50">
+                                <p class="text-[10px] uppercase font-bold text-slate-500 mb-1">Status</p>
+                                <span
+                                    class="inline-flex items-center rounded-full px-2 py-0.5 text-xs font-bold bg-blue-500/10 text-blue-400 ring-1 ring-inset ring-blue-500/20"
+                                    id="modal-status">Novo</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="px-6 py-4 bg-slate-900/50 border-t border-white/5 flex gap-3 justify-end">
+                        <button type="button"
+                            class="inline-flex justify-center rounded-lg bg-white/10 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-white/20 ring-1 ring-inset ring-white/10"
+                            onclick="closeModal()">Fechar</button>
+                        <button type="button"
+                            class="inline-flex justify-center rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            id="modal-btn-edit">
+                            <span class="material-symbols-outlined text-[18px] mr-1.5">edit</span> Editar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Data Management - Fetched from API
+        let records = [];
+
+        async function loadRecords() {
+            try {
+                const response = await fetch('/api/records');
+                const allRecords = await response.json();
+                // Filter OUT completed records from this view
+                records = allRecords.filter(r => r.status !== 'Concluído');
+                renderCards();
+            } catch (e) {
+                console.error("Error loading records", e);
+            }
+        }
+
+        // DOM Elements
+        const toolbar = document.querySelector('.mb-6 .flex.flex-wrap.items-center.gap-3');
+        const btnAdd = toolbar ? toolbar.querySelector('button:nth-of-type(1)') : null;
+        const btnEdit = toolbar ? toolbar.querySelector('button:nth-of-type(2)') : null;
+        const btnFinalize = toolbar ? toolbar.querySelector('button:nth-of-type(3)') : null;
+        const btnDelete = toolbar ? toolbar.querySelector('button:nth-of-type(4)') : null;
+        const gridContainer = document.querySelector('.grid.grid-cols-1');
+
+        // Modal Elements
+        const modal = document.getElementById('context-modal');
+        const modalBackdrop = document.getElementById('modal-backdrop');
+        const modalPanel = document.getElementById('modal-panel');
+
+        // State
+        let selectedId = null;
+
+        function renderCards() {
+            if (!gridContainer) return;
+            gridContainer.innerHTML = '';
+
+            records.forEach(record => {
+                const isSelected = selectedId === record.id;
+                let statusColor = 'bg-blue-50 text-blue-700 ring-blue-600/20';
+                if (record.status === 'Concluído') statusColor = 'bg-emerald-50 text-emerald-700 ring-emerald-600/20';
+                if (record.status === 'Urgente') statusColor = 'bg-red-50 text-red-700 ring-red-600/20';
+
+                let displayAttendant = Array.isArray(record.attendant) ? record.attendant.join(', ') : record.attendant;
+
+                const cardHTML = `
+                    <div class="group relative flex flex-col justify-between overflow-hidden rounded-xl glass-card text-white p-5 shadow-sm ring-1 ${isSelected ? 'ring-primary shadow-md' : 'ring-slate-200 dark:ring-slate-800'} transition-all hover:shadow-md hover:ring-primary/50 dark:hover:ring-primary/50 cursor-pointer" onclick="openRecordDetails(${record.id})">
+                        <div class="absolute top-5 right-5 z-10">
+                            <input class="h-5 w-5 rounded border-slate-300 text-primary focus:ring-primary dark:border-slate-600 dark:bg-slate-800 cursor-pointer" 
+                            type="checkbox" ${isSelected ? 'checked' : ''} onclick="event.stopPropagation(); selectCard(${record.id})">
+                        </div>
+                        <div class="mb-4 flex items-start justify-between">
+                            <div class="flex flex-col gap-1 w-full pr-8">
+                                <div class="flex items-center gap-2">
+                                    <span class="inline-flex items-center rounded-full px-2 py-1 text-xs font-bold ring-1 ring-inset ${statusColor} dark:opacity-80">${record.status}</span>
+                                    <span class="text-xs font-medium text-slate-500">#SVC-${1000 + record.id}</span>
+                                </div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white mt-1 truncate w-full">${record.task || 'Registro de Atendimento'}</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                            <div class="flex items-center gap-3">
+                                <div class="flex items-center justify-center size-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-400">
+                                    <span class="material-symbols-outlined">person</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Atendente</p>
+                                    <p class="text-sm font-bold text-slate-900 dark:text-slate-200">${displayAttendant}</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="flex size-10 items-center justify-center rounded-full bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400">
+                                    <span class="material-symbols-outlined text-[20px]">badge</span>
+                                </div>
+                                <div>
+                                    <p class="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">Secretaria</p>
+                                    <p class="text-sm font-semibold text-slate-700 dark:text-slate-300">${record.secretary}</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4 rounded-lg bg-slate-50 dark:bg-slate-800/50 p-3 mt-1">
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">schedule</span>
+                                        <span class="text-[10px] font-medium uppercase">Início</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-900 dark:text-white">${record.date || '--'}</p>
+                                </div>
+                                <div>
+                                    <div class="flex items-center gap-1.5 text-slate-500 dark:text-slate-400 mb-1">
+                                        <span class="material-symbols-outlined text-[16px]">timer_off</span>
+                                        <span class="text-[10px] font-medium uppercase">Fim</span>
+                                    </div>
+                                    <p class="font-mono text-sm font-semibold text-slate-400 dark:text-slate-500">${record.endDate || '--'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridContainer.insertAdjacentHTML('beforeend', cardHTML);
+            });
+            updateButtons();
+        }
+
+        function selectCard(id) {
+            selectedId = (selectedId === id) ? null : id;
+            renderCards();
+        }
+
+        function openRecordDetails(id) {
+            const record = records.find(r => r.id === id);
+            if (!record) return;
+
+            document.getElementById('modal-subtitle').textContent = `#SVC-${1000 + record.id}`;
+            document.getElementById('modal-task-desc').textContent = record.task || 'Sem descrição detalhada.';
+            document.getElementById('modal-attendant').textContent = Array.isArray(record.attendant) ? record.attendant.join(', ') : record.attendant;
+            document.getElementById('modal-secretary').textContent = record.secretary;
+            document.getElementById('modal-date').textContent = record.date;
+            document.getElementById('modal-status').textContent = record.status;
+
+            // Edit button in modal
+            document.getElementById('modal-btn-edit').onclick = function () {
+                window.location.href = `/records?action=edit&id=${id}`;
+            };
+
+            // Show
+            modal.classList.remove('hidden');
+            // Animate
+            setTimeout(() => {
+                modalBackdrop.classList.remove('opacity-0');
+                modalPanel.classList.remove('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalBackdrop.classList.add('opacity-0');
+            modalPanel.classList.add('opacity-0', 'translate-y-4', 'sm:translate-y-0', 'sm:scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function handleAdd() {
+            window.location.href = '/records?action=new';
+        }
+
+        function handleEdit() {
+            if (selectedId) {
+                window.location.href = `/records?action=edit&id=${selectedId}`;
+            }
+        }
+
+        async function handleFinalize() {
+            if (!selectedId) return;
+            const record = records.find(r => r.id === selectedId);
+            if (!record) return;
+
+            if (confirm('Deseja finalizar este atendimento?')) {
+                // Prepare updated record data
+                const updatedRecord = {
+                    ...record,
+                    status: 'Concluído',
+                    endDate: new Date().toISOString().split('T')[0] // Today YYYY-MM-DD
+                };
+
+                // Send update
+                await fetch('/api/records', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(updatedRecord)
+                });
+
+                // Refresh
+                selectedId = null;
+                await loadRecords();
+                alert('Atendimento finalizado com sucesso!');
+            }
+        }
+
+        async function handleDelete() {
+            if (selectedId && confirm('Tem certeza que deseja remover este registro?')) {
+                await fetch(`/api/records/${selectedId}`, { method: 'DELETE' });
+                selectedId = null;
+                await loadRecords();
+            }
+        }
+
+        function updateButtons() {
+            const hasSelection = selectedId !== null;
+            if (btnEdit) {
+                btnEdit.classList.toggle('opacity-50', !hasSelection);
+                btnEdit.classList.toggle('cursor-not-allowed', !hasSelection);
+                btnEdit.style.pointerEvents = hasSelection ? 'auto' : 'none';
+            }
+            if (btnFinalize) {
+                btnFinalize.classList.toggle('opacity-50', !hasSelection);
+                btnFinalize.classList.toggle('cursor-not-allowed', !hasSelection);
+                btnFinalize.style.pointerEvents = hasSelection ? 'auto' : 'none';
+            }
+            if (btnDelete) {
+                btnDelete.classList.toggle('opacity-50', !hasSelection);
+                btnDelete.classList.toggle('cursor-not-allowed', !hasSelection);
+                btnDelete.style.pointerEvents = hasSelection ? 'auto' : 'none';
+            }
+        }
+
+        if (btnAdd) btnAdd.onclick = handleAdd;
+        if (btnEdit) btnEdit.onclick = handleEdit;
+        if (btnFinalize) btnFinalize.onclick = handleFinalize;
+        if (btnDelete) btnDelete.onclick = handleDelete;
+
+        loadRecords();
+
+    </script>
+</body>
+
+</html>
