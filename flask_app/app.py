@@ -314,5 +314,40 @@ def get_dti_rooms_data():
         print(f"Error fetching DTI room data: {e}")
         return jsonify({'error': str(e)}), 500
 
+# --- Backup System ---
+import csv
+
+@app.route('/admin/backup-now')
+def trigger_backup():
+    try:
+        tables = ["atendimento_cadastro", "cadastro_equipe", "dti_room_status"]
+        backup_dir = os.path.join(app.static_folder, "backups")
+        os.makedirs(backup_dir, exist_ok=True)
+        
+        links = []
+        
+        for table in tables:
+            response = supabase.table(table).select("*").execute()
+            data = response.data
+            
+            if data:
+                # Save JSON
+                with open(os.path.join(backup_dir, f"{table}.json"), 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=4, ensure_ascii=False)
+                
+                # Save CSV
+                keys = data[0].keys()
+                with open(os.path.join(backup_dir, f"{table}.csv"), 'w', newline='', encoding='utf-8') as f:
+                    writer = csv.DictWriter(f, fieldnames=keys)
+                    writer.writeheader()
+                    writer.writerows(data)
+                    
+                links.append(f"<a href='/static/backups/{table}.csv' download>Baixar {table}.csv</a>")
+        
+        return f"<h1>Backup Realizado com Sucesso!</h1><p>Clique para baixar:</p><ul>" + "".join([f"<li>{l}</li>" for l in links]) + "</ul>"
+            
+    except Exception as e:
+        return f"Erro no backup: {str(e)}", 500
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
