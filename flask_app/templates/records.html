@@ -87,37 +87,38 @@
                 </button>
             </div>
         </header>
-        <div class="flex-1 overflow-y-auto p-8">
+        <div class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-6xl mx-auto flex flex-col gap-6">
                 <section class="glass-panel text-white rounded-xl shadow-sm border border-white/10 overflow-hidden">
-                    <div class="px-6 py-4 border-b border-white/10 flex justify-between items-center bg-white/5">
+                    <div
+                        class="px-4 py-3 md:px-6 md:py-4 border-b border-white/10 flex flex-col md:flex-row justify-between items-start md:items-center bg-white/5 gap-4">
                         <div>
                             <h3 class="text-lg font-bold text-slate-900 dark:text-white">Novo Registro de Atendimento
                             </h3>
-                            <p class="text-sm text-slate-500ダークtext-slate-400">Gerencie tarefas diárias e crie novos
+                            <p class="text-sm text-slate-500 dark:text-slate-400">Gerencie tarefas diárias e crie novos
                                 registros.</p>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex w-full md:w-auto gap-2 overflow-x-auto md:overflow-visible">
                             <button
-                                class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-red-600 dark:text-red-400 rounded-lg text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-red-600 dark:text-red-400 rounded-lg text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                 title="Selecione uma linha para habilitar">
                                 <span class="material-symbols-outlined text-[18px]">delete</span>
-                                Excluir
+                                <span class="hidden sm:inline">Excluir</span>
                             </button>
                             <button
-                                class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                class="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-white dark:bg-slate-700 border border-slate-200 border-white/10 text-slate-700 dark:text-slate-200 rounded-lg text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed whitespace-nowrap"
                                 title="Selecione uma linha para habilitar">
                                 <span class="material-symbols-outlined text-[18px]">edit</span>
-                                Editar
+                                <span class="hidden sm:inline">Editar</span>
                             </button>
                             <button
-                                class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-200 dark:shadow-none">
+                                class="flex-1 md:flex-none flex items-center justify-center gap-2 px-3 py-2 bg-primary text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors shadow-sm shadow-blue-200 dark:shadow-none whitespace-nowrap">
                                 <span class="material-symbols-outlined text-[18px]">add</span>
                                 Adicionar
                             </button>
                         </div>
                     </div>
-                    <div class="p-6">
+                    <div class="p-4 md:p-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div class="flex flex-col gap-1.5 ">
                                 <div class="flex justify-between items-center">
