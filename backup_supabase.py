@@ -61,7 +61,9 @@ def backup_table(table_name, backup_dir):
 
 def main():
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
-    backup_dir = os.path.join("backups", timestamp)
+    # Save to static folder so it can be downloaded via browser
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    backup_dir = os.path.join(base_dir, "flask_app", "static", "backups")
     os.makedirs(backup_dir, exist_ok=True)
 
     print(f"=== Iniciando Backup Supabase ===")
@@ -72,6 +74,7 @@ def main():
         backup_table(table, backup_dir)
     
     print("\nBackup concluído!")
+    print(f"Para baixar, acesse: seu-site/static/backups/NOMEDATABELA.json")
 
 if __name__ == "__main__":
     main()
