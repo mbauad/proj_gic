@@ -938,6 +938,14 @@
             doc.save(`Status_Salas_${date.replace(/\//g, '-')}.pdf`);
         }
     </script>
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay'); // This page uses sidebarOverlay div defined at top
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+    </script>
 </body>
 
 </html>

@@ -335,7 +335,17 @@
             doc.save('relatorio_belem_digital.pdf');
         }
     </script>
+    <div id="mobile-overlay" class="fixed inset-0 bg-black/80 z-30 hidden md:hidden transition-opacity duration-300"
+        onclick="toggleMenu()"></div>
+
+    <script>
+        function toggleMenu() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('mobile-overlay');
+            sidebar.classList.toggle('-translate-x-full');
+            overlay.classList.toggle('hidden');
+        }
+    </script>
 </body>
 
 </html>
-```
